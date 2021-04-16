@@ -12,16 +12,15 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(Course.getCourses(), self.course1, msg="New course was not created successfully")
 
     def test_create_course_invalid_information(self):
-        with self.assertRaises(TypeError, msg="Admin creating a course with invalid info did not raise error")
+        with self.assertRaises(TypeError, msg="Admin creating a course with invalid info did not raise error"):
             self.admin.createCourse(self.course0)
 
     def test_create_course_already_existing(self):
         self.assertEqual(self.admin.createCourse(), "Course has already been created", msg="Incorrect error message"
-                                                                                           "when trying to create a course"
-                                                                                           "that already exists")
+                                                            "when trying to create a course that already exists")
 
     def test_create_course_invalid_permissions(self):
-        with self.assertRaises(PermissionError, msg="Non-admin creating a course did not raise error")
+        with self.assertRaises(PermissionError, msg="Non-admin creating a course did not raise error"):
             self.prof.createCourse(self.course1)
 
 
