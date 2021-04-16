@@ -1,35 +1,29 @@
 import unittest
 
-# TODO in progress
 class MyTestCase(unittest.TestCase):
-    '''def setUp(self):
-    need user
-    and some sample courses
+    def setUp(self):
+        self.admin = Administrator("Admin", "admin@uwm.edu")
+        self.prof = Professor("Prof", "prof@uwm.edu")
+        self.course0 = Course()
+        self.course1 = Course("CS 361", ["Lab 1", "Lab 2", "Lab 3"])
 
     def test_create_course(self):
-        test that a course is created correctly
-        when user is supervisor
-        and correct information is entered
-        and the course has not yet been created
+        self.admin.createCourse(self.course1)
+        self.assertEqual(Course.getCourses(), self.course1, msg="New course was not created successfully")
 
     def test_create_course_invalid_information(self):
-        test that a course is not created
-        when user is supervisor
-        and invalid information is entered/missing fields
-        and error message is displayed
+        with self.assertRaises(TypeError, msg="Admin creating a course with invalid info did not raise error")
+            self.admin.createCourse(self.course0)
 
     def test_create_course_already_existing(self):
-        test that a course is not created
-        when user is supervisor
-        and correct information is entered
-        and the course has already been created
+        self.assertEqual(self.admin.createCourse(), "Course has already been created", msg="Incorrect error message"
+                                                                                           "when trying to create a course"
+                                                                                           "that already exists")
 
     def test_create_course_invalid_permissions(self):
-        test that a course is not created
-        when user is not a supervisor
-        and error message is displayed
+        with self.assertRaises(PermissionError, msg="Non-admin creating a course did not raise error")
+            self.prof.createCourse(self.course1)
 
-    '''
 
 
 if __name__ == '__main__':
