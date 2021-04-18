@@ -9,10 +9,10 @@ class MyTestCase(unittest.TestCase):
 
     def test_create_course(self):
         self.admin.createCourse(self.course1)
-        self.assertEqual(Course.getCourses(), self.course1, msg="New course was not created successfully")
+        self.assertEqual(self.admin.accessData().courses, self.course1, msg="New course was not created successfully")
 
     def test_create_course_invalid_information(self):
-        with self.assertRaises(TypeError, msg="Admin creating a course with invalid info did not raise error"):
+        with self.assertRaises(TypeError, msg="Admin creating a course with invalid input did not raise error"):
             self.admin.createCourse(self.course0)
 
     def test_create_course_already_existing(self):
