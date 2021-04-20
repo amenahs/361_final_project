@@ -15,6 +15,8 @@ class MyTestCase(unittest.TestCase):
         #test that new account is not created if username correlates to
         #a pre-existing account
 
+
+        
 class AssignCourseTest(unittest.TestCase):
     def setUp(self):
 
@@ -32,3 +34,4 @@ class AssignCourseTest(unittest.TestCase):
 
     def test_not_admin_ta(self):
         #test that course cannot be assigned by ta
+
