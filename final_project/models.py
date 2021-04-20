@@ -19,25 +19,25 @@ class User(models.Model):
     def __sendNotification__(self):
         pass
 
-class Accounts(models.Model):
-    def __createAccount__(self):
-        pass
+# class Accounts(models.Model):
+#     def __createAccount__(self):
+#         pass
+#
+#     def __deleteAccount__(self):
+#         pass
+#
+#     def __editAccount__(self):
+#         pass
 
-    def __deleteAccount__(self):
-        pass
-
-    def __editAccount__(self):
-        pass
-
-class Assign(models.Model):
-    def __assignProfessor__(self):
-        pass
-
-    def __assignTACourse__(self):
-        pass
-
-    def __assignTALab__(self):
-        pass
+# class Assign(models.Model):
+#     def __assignProfessor__(self):
+#         pass
+#
+#     def __assignTACourse__(self):
+#         pass
+#
+#     def __assignTALab__(self):
+#         pass
 
 class Administrator(models.Model):
     title = models.CharField(max_length=40)
