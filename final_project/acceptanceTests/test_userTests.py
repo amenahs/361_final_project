@@ -1,8 +1,8 @@
-import unittest
+from django.test import TestCase
 from django.test import Client
-from .models import User
+from final_project.models import User
 
-class userLoginTestClass(unittest.TestCase):
+class UserLoginTestClass(TestCase):
     def setUp(self):
         self.client = Client()
         self.user1 = User.objects.create(email='user@gmail.com', password='1234')
@@ -28,6 +28,3 @@ class userLoginTestClass(unittest.TestCase):
         resp = self.client.post('/', {'email': 'user@gmail.com', 'password': '1234'})
         self.assertEqual(resp.url, '/dashboard/', msg='User was not redirected to dashboard page after logging in with correct credentials')
 
-
-if __name__ == '__main__':
-    unittest.main()

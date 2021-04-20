@@ -3,21 +3,21 @@ from django.db import models
 # Create your models here.
 
 class User(models.Model):
-    userID = models.UUIDField()
+    # userID = models.UUIDField()
     name = models.CharField(max_length=40)
     email = models.CharField(max_length=40)
     password = models.CharField(max_length=20)
-    phoneNumber = models.IntegerField(max_length=10)
+    phoneNumber = models.IntegerField()
     homeAddress = models.CharField(max_length=75)
 
-    def __getPublicInfo__(self):
-        pass
-
-    def __editContactInfo__(self):
-        pass
-
-    def __sendNotification__(self):
-        pass
+    # def __getPublicInfo__(self):
+    #     pass
+    #
+    # def __editContactInfo__(self):
+    #     pass
+    #
+    # def __sendNotification__(self):
+    #     pass
 
 # class Accounts(models.Model):
 #     def __createAccount__(self):
@@ -38,7 +38,7 @@ class User(models.Model):
 #
 #     def __assignTALab__(self):
 #         pass
-
+"""
 class Administrator(models.Model):
     title = models.CharField(max_length=40)
 
@@ -76,10 +76,11 @@ class Professor(models.Model):
         pass
 
 class TA(models.Model):
+    pass
 
 class Lecture(models.Model):
     profID = models.ForeignKey(Professor, on_delete=models.PROTECT(), null=True)
-
+"""
 
 
 
