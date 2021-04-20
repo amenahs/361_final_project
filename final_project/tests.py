@@ -64,7 +64,6 @@ class CreateCourseTests(unittest.TestCase):
     def test_create_course_invalid_permissions(self):
         with self.assertRaises(PermissionError, msg="Non-admin creating a course did not raise error"):
             self.prof.createCourse(self.course1)
-
             
 class AssignCourseTest(unittest.TestCase):
     def setUp(self):
