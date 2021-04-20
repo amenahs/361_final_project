@@ -5,7 +5,7 @@ from .models import User
 
 class Home(View):
     def get(self,request):
-        return render(request,"home.html",{})
+        return render(request, "home.html", {})
     def post(self,request):
         noSuchUser = False
         badPassword = False
@@ -15,8 +15,8 @@ class Home(View):
         except:
             noSuchUser = True
         if noSuchUser:
-            return render(request,"home.html",{"message":"user does not exist"})
+            return render(request, "home.html", {"message": "user does not exist"})
         elif badPassword:
-            return render(request,"home.html",{"message":"bad password"})
+            return render(request, "home.html", {"message": "bad password"})
         else:
             return render(request, "home.html", {"message": "an error occurred, please try again"})
