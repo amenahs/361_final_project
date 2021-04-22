@@ -66,22 +66,43 @@ class CreateCourseTests(unittest.TestCase):
             self.prof.createCourse(self.course1)
             
 class AssignCourseTest(unittest.TestCase):
-    def setUp(self):
+    class AssignCourseTest(unittest.TestCase):
+        def setUp(self):
+            self.admin = Administrator("Admin", "admin@uwm.edu")
+            self.inst = Professor("Inst", "inst@uwm.edu")
+            self.ta = TA("TA", "ta@uwm.edu")
+            self.course = Course("CS 361", [])
 
-    def test_assign_inst(self):
-        #test that instructor is correctly assigned to course by admin
+        def test_assign_inst(self):
+            # test that instructor is correctly assigned to course by admin
+            self.admin.assignProfessor(self.inst, self.course)
+            self.assertEquals(self.inst.userID, self.course.professorID, msg="Failed to assign professor correctly")
 
-    def test_assign_ta(self):
-        #test that ta is correctly assigned to course by admin
+        def test_assign_ta(self):
+            # test that ta is correctly assigned to course by admin
+            self.admin.assignTACourse(self.ta, self.course)
+            ###self.assertEquals(self.inst.userID, self.course., msg="Failed to assign TA correctly")
 
-    def test_assign_admin(self):
-        #test that administrator cannot be assigned to course
+        def test_assign_admin(self):
+            # test that administrator cannot be assigned to course
+            with assertRaises
 
-    def test_not_admin_inst(self):
-        #test that course cannot be assigned by instructor
+        def test_inst_assign_inst(self):
+            # test that course cannot be assigned by instructor
+            with assertRaises(PermissionError, msg="Instructor assigning instructor failed to raise error"):
+                self.inst.assignProfessor(self.inst, self.course)
 
-    def test_not_admin_ta(self):
-        #test that course cannot be assigned by ta
-     
+        def test_inst_assign_ta(self):
+            # test that course cannot be assigned by ta
+            with assertRaises(PermissionError, msg="Instructor assigning ta failed to raise error"):
+                self.inst.assignTACourse(self.ta, self.course)
 
+        def test_ta_assign_inst(self):
+            # test that course cannot be assigned by instructor
+            with assertRaises(PermissionError, msg="TA assigning instructor failed to raise error"):
+                self.ta.assignProfessor(self.inst, self.course)
 
+        def test_ta_assign_ta(self):
+            # test that course cannot be assigned by ta
+            with assertRaises(PermissionError, msg="TA assigning ta failed to raise error"):
+                self.ta.assignTACourse(self.ta, self.course)
