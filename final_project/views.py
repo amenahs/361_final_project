@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .models import User
+from .models import User, Course
 # Create your views here.
 
 class Home(View):
@@ -23,3 +23,21 @@ class Home(View):
 
 class Dashboard(View):
     pass
+
+class CreateCourse(View):
+    def get(self,request):
+        return render(request, "create-course.html", {})
+    def post(self, request):
+        courseExists = False
+        try:
+            c = Course.objects.get(courseID=request.POST['courseID'])
+            courseExists = True
+        except:
+            newCourse = Course.objects.create(courseID=request.POST['courseID'], name=request.POST['name'])
+            newCourse.save()
+
+        if courseExists:
+            return render(request, "create-course.html", {"message": "course already exists"})
+        else:
+            return render(request, "create-course.html", {"message": "course successfully created"})
+

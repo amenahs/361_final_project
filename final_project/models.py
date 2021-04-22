@@ -56,7 +56,8 @@ class Course(models.Model):
     courseID = models.CharField(max_length=40)
     name = models.CharField(max_length=40)
     # TODO multiple labs
-    # labList = models.ForeignKey(Lab, on_delete=models.PROTECT(), null=True)
+    # labs = models.ManyToManyField('Lab')
+    #labList = models.ForeignKey(Lab, on_delete=models.PROTECT(), null=True)
 """
 class Instructor(models.Model):
     coursesTaught = models.ForeignKey(Course, on_delete=models.PROTECT(), null=True)
