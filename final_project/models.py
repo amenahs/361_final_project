@@ -13,9 +13,12 @@ class User(models.Model):
 class Administrator(models.Model):
     title = models.CharField(max_length=40)
 
+class TA(models.Model):
+    pass
+
 class Lab(models.Model):
     labID = models.CharField(max_length=3)
-    taID = models.ForeignKey(TA, on_delete=models.PROTECT, null=True)
+    taID = models.ForeignKey(TA, on_delete=models.CASCADE, null=True)
 
 class Course(models.Model):
     courseID = models.CharField(max_length=40)
@@ -25,17 +28,14 @@ class Course(models.Model):
     #labList = models.ForeignKey(Lab, on_delete=models.PROTECT(), null=True)
 
 class Instructor(models.Model):
-    coursesTaught = models.ForeignKey(Course, on_delete=models.PROTECT(), null=True)
+    coursesTaught = models.ForeignKey(Course, on_delete=models.CASCADE, null=True)
 
 class Professor(models.Model):
     pass
 
-class TA(models.Model):
-    pass
-
 class Lecture(models.Model):
-    profID = models.ForeignKey(Professor, on_delete=models.PROTECT(), null=True)
-    taID = models.ForeignKey(TA, on_delete=models.PROTECT(), null=True)
+    profID = models.ForeignKey(Professor, on_delete=models.CASCADE, null=True)
+    taID = models.ForeignKey(TA, on_delete=models.CASCADE, null=True)
 
 
 

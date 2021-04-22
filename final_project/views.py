@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .models import User, Course
+from .models import User, Administrator, Instructor, Professor, TA, Course
 # Create your views here.
 
 class Home(View):
@@ -22,6 +22,9 @@ class Home(View):
             return render(request, "home.html", {"message":"an error occurred, please try again"})
 
 class Dashboard(View):
+    pass
+
+class CreateAccount(View):
     pass
 
 class CreateCourse(View):
