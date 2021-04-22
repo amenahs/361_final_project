@@ -40,6 +40,9 @@ class CreateAccountTests(unittest.TestCase):
     def test_existing_acc(self):
         #test that new account is not created if username correlates to
         #a pre-existing account
+
+    def test_create_acc_invalid_permissions(self):
+        #test that only admin/supervisor can create account
         
 class CreateCourseTests(unittest.TestCase):
 
