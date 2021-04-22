@@ -5,8 +5,8 @@ from final_project.models import User
 class UserLoginTestClass(TestCase):
     def setUp(self):
         self.client = Client()
-        self.user1 = User.objects.create(email='user@gmail.com', password='1234')
-        self.user2 = User.objects.create(email='anotheruser@gmail.com', password='5678')
+        self.user1 = User.objects.create(email='user@gmail.com', password='1234', phoneNumber=1234567890)
+        self.user2 = User.objects.create(email='anotheruser@gmail.com', password='5678', phoneNumber=1234567890)
 
     def testNoPassword(self):
         resp = self.client.post('/', {'email': 'user@gmail.com', 'password': ''})
