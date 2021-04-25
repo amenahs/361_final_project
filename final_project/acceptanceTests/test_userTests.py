@@ -3,6 +3,8 @@ from django.test import Client
 from final_project.models import User
 
 
+# tests for the general user class
+
 class UserLoginTestClass(TestCase):
     def setUp(self):
         self.client = Client()
