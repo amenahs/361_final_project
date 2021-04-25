@@ -14,7 +14,7 @@ class CreateAccountTestClass(TestCase):
 
     def testValidUsername(self):
         resp = self.client.post('/', {'email': 'user@gmail.com', 'password': '1234'})
-        self.assertEqual(resp.url, '/dashboard/', msg='Username accepted')
+        self.assertEqual(resp.context["message"], "valid username", msg="Valid username entered")
 
     def testOtherUserName(self):
         resp = self.client.post("/", {'email': 'user@gmail.com', 'password': '5678'})
