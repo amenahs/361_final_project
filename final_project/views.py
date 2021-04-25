@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from .models import User, Administrator, Instructor, Professor, TA, Course
+from .classes.administrator import Admin
 # Create your views here.
 
 class Home(View):
@@ -19,7 +20,8 @@ class Home(View):
         elif badPassword:
             return render(request, "home.html", {"message":"bad password"})
         else:
-            return render(request, "home.html", {"message":"an error occurred, please try again"})
+            request.session["name"] = m.email
+            return redirect("/dashboard/")
 
 class Dashboard(View):
     pass
@@ -31,16 +33,15 @@ class CreateCourse(View):
     def get(self,request):
         return render(request, "create-course.html", {})
     def post(self, request):
-        courseExists = False
+        newCourseID = request.POST['courseID']
+        newCourseName = request.POST['name']
         try:
-            c = Course.objects.get(courseID=request.POST['courseID'])
-            courseExists = True
-        except:
-            newCourse = Course.objects.create(courseID=request.POST['courseID'], name=request.POST['name'])
-            newCourse.save()
-
-        if courseExists:
+            a = Admin()
+            a.__createCourse__(newCourseID, newCourseName)
+        except ValueError:
             return render(request, "create-course.html", {"message": "course already exists"})
+        except TypeError:
+            return render(request, "create-course.html", {"message": "invalid input"})
         else:
             return render(request, "create-course.html", {"message": "course successfully created"})
 
