@@ -13,7 +13,7 @@ class User(models.Model):
     name = models.CharField(max_length=40)
     email = models.CharField(max_length=40)
     password = models.CharField(max_length=20)
-    type = models.CharField(max_length=1, choices=AccountType.choices)
+    type = models.CharField(max_length=1, choices=AccountType.choices, default=AccountType.Administrator)
     phoneNumber = models.IntegerField()
     homeAddress = models.CharField(max_length=75)
 
