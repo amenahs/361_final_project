@@ -24,24 +24,27 @@ class Home(View):
             return redirect("/dashboard/")
 
 class Dashboard(View):
-    pass
+    def get(self, request):
+        return render(request, "dashboard.html", {})
 
 class CreateAccount(View):
-    pass
+    def get(self, request):
+        return render(request, "create-account.html", {})
 
 class CreateCourse(View):
     def get(self,request):
         return render(request, "create-course.html", {})
-    def post(self, request):
+    def post(self,request):
         newCourseID = request.POST['courseID']
         newCourseName = request.POST['name']
         try:
             a = Admin()
             a.__createCourse__(newCourseID, newCourseName)
         except ValueError:
-            return render(request, "create-course.html", {"message": "course already exists"})
+            return render(request, "create-course.html", {"message": "Course already exists"})
         except TypeError:
-            return render(request, "create-course.html", {"message": "invalid input"})
+            return render(request, "create-course.html", {"message": "Invalid input"})
         else:
-            return render(request, "create-course.html", {"message": "course successfully created"})
+            return render(request, "create-course.html", {"message": "Course successfully created"})
+
 
