@@ -22,17 +22,3 @@ class CreateCourseTests(TestCase):
         resp = self.client.post('/create-course/', {'courseID': "CS 337", 'name': "Systems Programming"})
         self.assertEqual("Course successfully created", resp.context["message"], msg="Creating unique course was not successful")
 
-# unit tests below
-
-    def test_createNewCourse(self):
-        c = self.admin.__createCourse__("CS 395", "Ethics in Computing")
-        self.assertEqual(c, Course.objects.get(courseID="CS 395"), msg="New course was not created successfully")
-
-    def test_createCourseInvalidInfo(self):
-        with self.assertRaises(TypeError, msg="Admin creating a course with invalid info did not raise TypeError"):
-            self.admin.__createCourse__("", "")
-
-    def test_createCourseAlreadyExisting(self):
-        with self.assertRaises(ValueError, msg="Admin creating a course that already exists did not raise ValueError"):
-            self.admin.__createCourse__("CS 361", "Introduction to Software Engineering")
-
