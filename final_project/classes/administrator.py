@@ -1,6 +1,6 @@
 from final_project.classes.accounts import Accounts
 from final_project.classes.assign import Assign
-from final_project.models import User, Administrator, Professor, TA, Course
+from final_project.models import User, Administrator, Professor, TA, Course, AccountType
 
 
 class Admin(Assign, Accounts):
@@ -12,16 +12,15 @@ class Admin(Assign, Accounts):
             accountExists = True
         except:
             newAcc = None
-            if account=="A":
-                newAcc = Administrator.objects.create(name=name, email=email, password=password, type=account, phoneNumber=phoneNum, address=address)
-            elif account=="P":
-                newAcc = Professor.objects.create(name=name, email=email, password=password, type=account, phoneNumber=phoneNum, address=address)
-            elif account=="T":
-                newAcc = TA.objects.create(name=name, email=email, password=password, type=account, phoneNumber=phoneNum, address=address)
+            if account=='A':
+                newAcc = Administrator.objects.create(name=name, email=email, password=password, type=AccountType.Administrator, phoneNumber=phoneNum, homeAddress=address)
+            elif account=='P':
+                newAcc = Professor.objects.create(name=name, email=email, password=password, type=AccountType.Professor, phoneNumber=phoneNum, homeAddress=address)
+            elif account=='T':
+                newAcc = TA.objects.create(name=name, email=email, password=password, type=AccountType.TA, phoneNumber=phoneNum, homeAddress=address)
             else:
-                return TypeError("Invalid account type")
+                raise TypeError("Invalid input")
 
-            newAcc.save()
             return newAcc
 
         if accountExists:
