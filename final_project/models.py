@@ -3,10 +3,17 @@ from django.db import models
 # Create your models here.
 
 
+class AccountType(models.TextChoices):
+    Administrator='A'
+    Professor='P'
+    TA='T'
+
+
 class User(models.Model):
     name = models.CharField(max_length=40)
     email = models.CharField(max_length=40)
     password = models.CharField(max_length=20)
+    type = models.CharField(max_length=1, choices=AccountType.choices)
     phoneNumber = models.IntegerField()
     homeAddress = models.CharField(max_length=75)
 
