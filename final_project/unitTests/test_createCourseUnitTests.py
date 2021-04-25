@@ -1,9 +1,15 @@
-import unittest
+from django.test import TestCase
+import django
+import os
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
+django.setup()
+
 from final_project.models import Course
 from final_project.classes.administrator import Admin
 
 
-class CreateCourseUnitTests(unittest.TestCase):
+class CreateCourseUnitTests(TestCase):
     def setUp(self):
         self.admin = Admin()
         self.course = Course.objects.create(courseID='CS 361', name='Introduction to Software Engineering')
