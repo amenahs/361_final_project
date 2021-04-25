@@ -1,10 +1,12 @@
-from final_project.models import Administrator, Course
+from final_project.classes.accounts import Accounts
+from final_project.classes.assign import Assign
+from final_project.models import User, Administrator, Course
 
 
-class Admin():
+class Admin(Assign, Accounts):
     def __createCourse__(self, newCourseID, newCourseName):
         if not newCourseID or not newCourseName:
-            raise TypeError("invalid input")
+            raise TypeError("Invalid input")
 
         courseExists = False
 
@@ -16,7 +18,7 @@ class Admin():
             newCourse.save()
             return newCourse
         if courseExists:
-            raise ValueError("course exists already")
+            raise ValueError("Course exists already")
 
     def __accessData__(self):
         pass
