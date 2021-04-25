@@ -12,15 +12,15 @@ class CreateCourseTests(TestCase):
 
     def test_createCourseExisting(self):
         resp = self.client.post('/create-course/', {'courseID': 'CS 361', 'name': 'Introduction to Software Engineering'})
-        self.assertEqual("course already exists", resp.context["message"], msg="Creating non-unique course did not result in error message")
+        self.assertEqual("Course already exists", resp.context["message"], msg="Creating non-unique course did not result in error message")
 
     def test_createCourseInvalidInput(self):
         resp = self.client.post('/create-course/', {'courseID': '', 'name': ''})
-        self.assertEqual("invalid input", resp.context["message"], msg="Creating course wtih invalid input did not result in error message")
+        self.assertEqual("Invalid input", resp.context["message"], msg="Creating course wtih invalid input did not result in error message")
 
     def test_createCourseNew(self):
         resp = self.client.post('/create-course/', {'courseID': "CS 337", 'name': "Systems Programming"})
-        self.assertEqual("course successfully created", resp.context["message"], msg="Creating unique course was not successful")
+        self.assertEqual("Course successfully created", resp.context["message"], msg="Creating unique course was not successful")
 
 # unit tests below
 

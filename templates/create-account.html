@@ -2,9 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Create Accounts</title>
 </head>
 <body>
-
+<h1>Create Accounts</h1>
+<form action="/create-account/" method="post">
+    {% csrf_token %}
+    <table>
+        <tr><td>Name: </td><td><input type="text" name="name" required></td></tr>
+        <tr><td>Email: </td><td><input type="text" name="email" required></td></tr>
+        <tr><td>Password: </td><td><input type="password" name="password" required></td></tr>
+        <tr><td>Phone Number: </td><td><input type="text" name="number" required></td></tr>
+        <tr><td>Address: </td><td><input type="text" name="address" required></td></tr>
+        <tr><td>Type:   <select required name="account type">
+            <option value="prof">Professor</option>
+            <option value="ta">TA</option>
+        </select></td></tr>
+    </table>
+    <input type="submit">
+</form>
+{{ message }}
 </body>
 </html>
