@@ -95,20 +95,20 @@ class AssignCourseTest(unittest.TestCase):
 
         def test_inst_assign_inst(self):
             # test that course cannot be assigned by instructor
-            with assertRaises(PermissionError, msg="Instructor assigning instructor to coursefailed to raise error"):
+            with self.assertRaises(PermissionError, msg="Instructor assigning instructor to coursefailed to raise error"):
                 self.inst.assignProfessor(self.inst, self.course)
 
         def test_inst_assign_ta(self):
             # test that course cannot be assigned by ta
-            with assertRaises(PermissionError, msg="Instructor assigning ta to course failed to raise error"):
+            with self.assertRaises(PermissionError, msg="Instructor assigning ta to course failed to raise error"):
                 self.inst.assignTACourse(self.ta, self.course)
 
         def test_ta_assign_inst(self):
             # test that course cannot be assigned by instructor
-            with assertRaises(PermissionError, msg="TA assigning instructor to course failed to raise error"):
+            with self.assertRaises(PermissionError, msg="TA assigning instructor to course failed to raise error"):
                 self.ta.assignProfessor(self.inst, self.course)
 
         def test_ta_assign_ta(self):
             # test that course cannot be assigned by ta
-            with assertRaises(PermissionError, msg="TA assigning ta to course failed to raise error"):
+            with self.assertRaises(PermissionError, msg="TA assigning ta to course failed to raise error"):
                 self.ta.assignTACourse(self.ta, self.course)

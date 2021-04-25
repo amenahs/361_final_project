@@ -41,3 +41,4 @@ class CreateCourse(View):
         else:
             return render(request, "create-course.html", {"message": "course successfully created"})
 
+
