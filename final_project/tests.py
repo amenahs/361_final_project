@@ -1,5 +1,6 @@
 from django.test import TestCase
 import unittest
+from final_project.models import Administrator, Professor, Course
 
 
 class userLoginTestClass(unittest.TestCase):
