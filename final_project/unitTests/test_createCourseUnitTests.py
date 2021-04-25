@@ -1,5 +1,5 @@
 import unittest
-from final_project.models import Administrator, Course
+from final_project.models import Course
 from final_project.classes.administrator import Admin
 
 
