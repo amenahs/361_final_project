@@ -9,12 +9,17 @@
 <form action="/create-course/" method="post">
     {% csrf_token %}
     <table>
-        <tr><td>Course ID: </td><td><input type="text" name="courseID" required></td></tr>
+        <tr><td>Course ID (Must be 3 integers): </td><td><input type="text" name="courseID" maxlength = "3" pattern="\d{3}" required></td></tr>
         <tr><td>Course Name: </td><td><input type="text" name="name" required></td></tr>
         <tr><td>Number of Lab Sections: </td><td><input type="number" min="0" name="labNum" required></td></tr>
     </table>
     <input type="submit">
 </form>
 {{ message }}
+<br><br><br>
+    <a href="/dashboard/">Dashboard</a><br><br>
+    <form action="/" method="get">
+        <input type="submit" value="Logout"/>
+    </form>
 </body>
 </html>
