@@ -21,6 +21,7 @@ class Admin(Assign, Accounts):
             else:
                 raise TypeError("Invalid input")
 
+            newAcc.save()
             return newAcc
 
         if accountExists:
