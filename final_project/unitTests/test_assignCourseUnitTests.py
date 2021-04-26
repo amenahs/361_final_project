@@ -1,9 +1,13 @@
-import unittest
+from django.test import TestCase
+import django
+import os
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
+django.setup()
 from final_project.models import Administrator, Course, Professor, TA
 from final_project.classes.administrator import Admin
 
-class AssignCourseTest(unittest.TestCase):
-    class AssignCourseTest(unittest.TestCase):
+class AssignCourseTest(TestCase):
         def setUp(self):
             self.admin = Administrator("Admin", "admin@uwm.edu")
             self.inst = Professor("Inst", "inst@uwm.edu")

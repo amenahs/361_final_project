@@ -6,6 +6,7 @@ from .classes.administrator import Admin
 
 class Home(View):
     def get(self, request):
+        request.session.pop("email", None)
         return render(request, "home.html", {})
     def post(self, request):
         noSuchUser = False
@@ -20,17 +21,21 @@ class Home(View):
         elif badPassword:
             return render(request, "home.html", {"message":"bad password"})
         else:
-            request.session["name"] = m.email
+            request.session["email"] = m.email
             return redirect("/dashboard/")
 
 
 class Dashboard(View):
     def get(self, request):
+        if not request.session.get("email"):
+            return redirect("/")
         return render(request, "dashboard.html", {})
 
 
 class CreateAccount(View):
     def get(self, request):
+        if not request.session.get("email"):
+            return redirect("/")
         return render(request, "create-account.html", {})
     def post(self, request):
         name = request.POST['name']
@@ -54,6 +59,8 @@ class CreateAccount(View):
 
 class CreateCourse(View):
     def get(self, request):
+        if not request.session.get("email"):
+            return redirect("/")
         return render(request, "create-course.html", {})
     def post(self, request):
         newCourseID = request.POST['courseID']
