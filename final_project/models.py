@@ -19,7 +19,7 @@ class User(models.Model):
 
 
 class Course(models.Model):
-    courseID = models.CharField(max_length=40)
+    courseID = models.IntegerField()
     name = models.CharField(max_length=40)
     # TODO multiple labs
     # labs = models.ManyToManyField('Lab')
