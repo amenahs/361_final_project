@@ -5,6 +5,8 @@ from final_project.models import User, Administrator, Professor, TA, Course, Acc
 
 class Admin(Assign, Accounts):
     def __createAccount__(self, name, email, password, account, phoneNum, address):
+        if not name or not email or not password or not account or not address:
+            raise TypeError("Invalid input")
         accountExists = False
 
         try:
