@@ -47,7 +47,7 @@ class CreateAccount(View):
             return render(request, "create-account.html", {"message": "Account already exists"})
         except TypeError:
             print(type)
-            return render(request, "create-account.html", {"message": "Invalid account type"})
+            return render(request, "create-account.html", {"message": "Invalid input"})
         else:
             return render(request, "create-account.html", {"message": "Account successfully created"})
 
