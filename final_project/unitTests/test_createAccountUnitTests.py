@@ -1,9 +1,15 @@
-import unittest
+from django.test import TestCase
+import django
+import os
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
+django.setup()
+
 from final_project.models import Administrator, Professor
 from final_project.classes.administrator import Admin
 
 
-class CreateAccountUnitTests(unittest.TestCase):
+class CreateAccountUnitTests(TestCase):
     def setUp(self):
         self.admin = Administrator("Admin", "admin@uwm.edu")
         self.account = Account("username@gmail.com", 12345)
