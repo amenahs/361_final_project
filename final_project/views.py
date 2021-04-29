@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .models import User, Course, Lecture, Section
+from .models import User, TA, Course, Lecture, Section, AccountType
 from .classes.administrator import Admin
 # Create your views here.
 
@@ -102,8 +102,20 @@ class EditInformation(View):
         if not request.session.get("email"):
             return redirect("/")
         u = User.objects.get(email=request.session["email"])
+        isTA = False
+        if u.type == AccountType.TA:
+            isTA = True
+            ta = TA.objects.get(email=u.email)
+            return render(request, "edit-information.html", {"accountName": u.name, "accountEmail": u.email,
+                                                             "accountPassword": u.password,
+                                                             "accountPhoneNumber": u.phoneNumber,
+                                                             "accountAddress": u.homeAddress,
+                                                             "accountSkills": ta.skills,
+                                                             "TA": isTA})
+
         return render(request, "edit-information.html", {"accountName": u.name, "accountEmail": u.email,
-                "accountPassword": u.password, "accountPhoneNumber": u.phoneNumber, "accountAddress": u.homeAddress})
+                "accountPassword": u.password, "accountPhoneNumber": u.phoneNumber, "accountAddress": u.homeAddress,
+                                                         "TA": isTA})
 
     def post(self, request):
         name = request.POST['name']
@@ -112,17 +124,36 @@ class EditInformation(View):
         phoneNum = request.POST['number']
         address = request.POST['address']
         u = User.objects.get(email=request.session["email"])
+        isTA = False
+        if u.type == AccountType.TA:
+            isTA = True
         if not name or not email or not password or not address:
             return render(request, "edit-information.html", {"accountName": u.name, "accountEmail": u.email,
                                                              "accountPassword": u.password,
                                                              "accountPhoneNumber": u.phoneNumber,
                                                              "accountAddress": u.homeAddress,
-                                                             "message": "Invalid input"})
+                                                             "message": "Invalid input",
+                                                             "TA": isTA})
         u.name = name
         u.email = email
         u.password = password
         u.phoneNumber = phoneNum
         u.homeAddress = address
         u.save()
+        if isTA:
+            taSkills = request.POST['skills']
+            ta = TA.objects.get(email=u.email)
+            ta.skills = taSkills
+            ta.save()
+            return render(request, "edit-information.html", {"accountName": u.name, "accountEmail": u.email,
+                                                             "accountPassword": u.password,
+                                                             "accountPhoneNumber": u.phoneNumber,
+                                                             "accountAddress": u.homeAddress,
+                                                             "accountSkills": ta.skills,
+                                                             "message": "Information updated",
+                                                             "TA": isTA})
+
         return render(request, "edit-information.html", {"accountName": u.name, "accountEmail": u.email,
-                "accountPassword": u.password, "accountPhoneNumber": u.phoneNumber, "accountAddress": u.homeAddress, "message": "Information updated"})
+                "accountPassword": u.password, "accountPhoneNumber": u.phoneNumber, "accountAddress": u.homeAddress,
+                                                         "message": "Information updated",
+                                                         "TA": isTA})

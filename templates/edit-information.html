@@ -14,6 +14,9 @@
         <tr><td>Password: </td><td><input type="password" value={{ accountPassword }} name="password" required></td></tr>
         <tr><td>Phone Number: </td><td><input type="text" value={{ accountPhoneNumber }} maxlength="10" name="number" pattern="\d{10}" required></td></tr>
         <tr><td>Address: </td><td><input type="text" value={{ accountAddress }} name="address" required></td></tr>
+        {% if TA %}
+            <tr><td>Skills: </td><td><input type="text" name="skills" value={{ accountSkills }}></td></tr>
+        {% endif %}
     </table>
     <input type="submit" value="Update Information">
 </form> <br>
