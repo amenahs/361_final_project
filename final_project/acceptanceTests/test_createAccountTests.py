@@ -13,7 +13,7 @@ class CreateAccountTestClass(TestCase):
 
     def testValidUsername(self):
         resp = self.client.post('/create-account/', {'name': 'user', 'email': 'user@gmail.com', 'password': '1234', 'number': 1234567, 'address': 'Milwaukee,WI', 'type': 'P'})
-        self.assertEqual(resp.context["message"], "Account successfully created", msg="Valid username")
+        self.assertEqual(resp.url, "/create-account/", msg="Valid username")
 
     def testOtherUserName(self):
         #if account already exists
@@ -26,7 +26,7 @@ class CreateAccountTestClass(TestCase):
 
     def testValidPassword(self):
         resp = self.client.post('/create-account/', {'name': 'user', 'email': 'user@gmail.com', 'password': '1234', 'number': 1234567, 'address': 'Milwaukee,WI', 'type': 'P'})
-        self.assertEqual(resp.context["message"], "Account successfully created", msg="Valid password")
+        self.assertEqual(resp.url, "/create-account/", msg="Valid password")
 
 """
     def test_create_acc_invalid_permissions(self):

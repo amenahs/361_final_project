@@ -11,11 +11,62 @@
     <table>
         <tr><td>Course ID (Must be 3 integers): </td><td><input type="text" name="courseID" maxlength = "3" pattern="\d{3}" required></td></tr>
         <tr><td>Course Name: </td><td><input type="text" name="name" required></td></tr>
-        <tr><td>Number of Lab Sections: </td><td><input type="number" min="0" name="labNum" required></td></tr>
+        <tr><td>Number of Lectures: </td><td><input type="number" min="0" name="lectureNum" required></td></tr>
+        <tr><td>Number of Sections: </td><td><input type="number" min="0" name="sectionNum" required></td></tr>
     </table>
     <input type="submit">
 </form>
 {{ message }}
+<br><br>
+
+<table>
+    <tr>
+        <th>Course ID</th>
+        <th>Name</th>
+    </tr>
+
+    {% if courses %}
+        {% for c in courses %}
+            <tr>
+                <td>{{ c.0 }}</td>
+                <td>{{ c.1 }}</td>
+            </tr>
+        {% endfor %}
+    {%  endif %}
+</table> <br>
+
+<table>
+    <tr>
+        <th>Course ID</th>
+        <th>Lecture ID</th>
+    </tr>
+
+    {% if lectures %}
+        {% for l in lectures %}
+            <tr>
+                <td>{{ l.0 }}</td>
+                <td>{{ l.1 }}</td>
+            </tr>
+        {% endfor %}
+    {%  endif %}
+</table> <br>
+
+<table>
+    <tr>
+        <th>Course ID</th>
+        <th>Section ID</th>
+    </tr>
+
+    {% if sections %}
+        {% for s in sections %}
+            <tr>
+                <td>{{ s.0 }}</td>
+                <td>{{ s.1 }}</td>
+            </tr>
+        {% endfor %}
+    {%  endif %}
+</table>
+
 <br><br><br>
     <a href="/dashboard/">Dashboard</a><br><br>
     <form action="/" method="get">
