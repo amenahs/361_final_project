@@ -149,7 +149,7 @@ class EditInformation(View):
         name = request.POST['name']
         email = request.POST['email']
         password = request.POST['password']
-        phoneNum = request.POST['number']
+        phoneNum = int(request.POST['number'])
         address = request.POST['address']
         u = User.objects.get(email=request.session["email"])
 
