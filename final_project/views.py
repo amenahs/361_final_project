@@ -97,3 +97,32 @@ class CreateCourse(View):
         else:
             return redirect("/create-course/")
 
+class EditInformation(View):
+    def get(self, request):
+        if not request.session.get("email"):
+            return redirect("/")
+        u = User.objects.get(email=request.session["email"])
+        return render(request, "edit-information.html", {"accountName": u.name, "accountEmail": u.email,
+                "accountPassword": u.password, "accountPhoneNumber": u.phoneNumber, "accountAddress": u.homeAddress})
+
+    def post(self, request):
+        name = request.POST['name']
+        email = request.POST['email']
+        password = request.POST['password']
+        phoneNum = request.POST['number']
+        address = request.POST['address']
+        u = User.objects.get(email=request.session["email"])
+        if not name or not email or not password or not address:
+            return render(request, "edit-information.html", {"accountName": u.name, "accountEmail": u.email,
+                                                             "accountPassword": u.password,
+                                                             "accountPhoneNumber": u.phoneNumber,
+                                                             "accountAddress": u.homeAddress,
+                                                             "message": "Invalid input"})
+        u.name = name
+        u.email = email
+        u.password = password
+        u.phoneNumber = phoneNum
+        u.homeAddress = address
+        u.save()
+        return render(request, "edit-information.html", {"accountName": u.name, "accountEmail": u.email,
+                "accountPassword": u.password, "accountPhoneNumber": u.phoneNumber, "accountAddress": u.homeAddress, "message": "Information updated"})
