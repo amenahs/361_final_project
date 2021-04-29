@@ -22,7 +22,30 @@
     </table>
     <input type="submit">
 </form>
-{{ message }}
+{{ message }} <br>
+
+<table class="userList">
+    <tr>
+        <th>Email</th>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Phone Number</th>
+        <th>Address</th>
+    </tr>
+
+    {% if users %}
+        {% for u in users %}
+            <tr>
+                <td>{{ u.0 }}</td>
+                <td>{{ u.1 }}</td>
+                <td>{{ u.2 }}</td>
+                <td>{{ u.3 }}</td>
+                <td>{{ u.4 }}</td>
+            </tr>
+        {% endfor %}
+    {%  endif %}
+</table>
+
 <br><br><br>
     <a href="/dashboard/">Dashboard</a><br><br>
     <form action="/" method="get">

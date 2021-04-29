@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .models import User, Administrator, Instructor, Professor, TA, Course
+from .models import User, Course
 from .classes.administrator import Admin
 # Create your views here.
 
@@ -36,7 +36,13 @@ class CreateAccount(View):
     def get(self, request):
         if not request.session.get("email"):
             return redirect("/")
-        return render(request, "create-account.html", {})
+
+        users = User.objects.filter()
+        formattedUsers = []
+        for u in users:
+            formattedUsers.append((u.email, u.name, u.type, u.phoneNumber, u.homeAddress))
+        return render(request, "create-account.html", {"users": formattedUsers})
+
     def post(self, request):
         name = request.POST['name']
         email = request.POST['email']
@@ -53,14 +59,24 @@ class CreateAccount(View):
         except TypeError:
             return render(request, "create-account.html", {"message": "Invalid input"})
         else:
-            return render(request, "create-account.html", {"message": "Account successfully created"})
+            users = User.objects.filter()
+            formattedUsers = []
+            for u in users:
+                formattedUsers.append((u.email, u.name, u.type, u.phoneNumber, u.homeAddress))
+            return render(request, "create-account.html", {"message": "Account successfully created", "users": formattedUsers})
 
 
 class CreateCourse(View):
     def get(self, request):
         if not request.session.get("email"):
             return redirect("/")
-        return render(request, "create-course.html", {})
+
+        courses = Course.objects.filter()
+        formattedCourses = []
+        for c in courses:
+            formattedCourses.append((c.courseID, c.name))
+        return render(request, "create-course.html", {"courses": formattedCourses})
+
     def post(self, request):
         newCourseID = request.POST['courseID']
         newCourseName = request.POST['name']
@@ -72,6 +88,10 @@ class CreateCourse(View):
         except TypeError:
             return render(request, "create-course.html", {"message": "Invalid input"})
         else:
-            return render(request, "create-course.html", {"message": "Course successfully created"})
+            courses = Course.objects.filter()
+            formattedCourses = []
+            for c in courses:
+                formattedCourses.append((c.courseID, c.name))
+            return render(request, "create-course.html", {"message": "Course successfully created", "courses": formattedCourses})
 
 

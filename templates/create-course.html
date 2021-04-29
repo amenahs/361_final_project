@@ -15,7 +15,26 @@
     </table>
     <input type="submit">
 </form>
-{{ message }}
+{{ message }} <br>
+
+<table class="courseList">
+    <tr>
+        <th>Course ID</th>
+        <th>Name</th>
+        <th>Sections</th>
+    </tr>
+
+    {% if courses %}
+        {% for c in courses %}
+            <tr>
+                <td>{{ c.0 }}</td>
+                <td>{{ c.1 }}</td>
+                <td>TBA</td>
+            </tr>
+        {% endfor %}
+    {%  endif %}
+</table>
+
 <br><br><br>
     <a href="/dashboard/">Dashboard</a><br><br>
     <form action="/" method="get">
