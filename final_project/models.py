@@ -21,9 +21,6 @@ class User(models.Model):
 class Course(models.Model):
     courseID = models.IntegerField()
     name = models.CharField(max_length=40)
-    # TODO multiple labs
-    # labs = models.ManyToManyField('Lab')
-    # labList = models.ForeignKey(Lab, on_delete=models.PROTECT(), null=True)
 
 
 class Instructor(User):
@@ -34,19 +31,22 @@ class Administrator(User):
     title = models.CharField(max_length=40)
 
 
-class TA(Instructor):
-    pass
-
-
-class Lab(models.Model):
-    labID = models.CharField(max_length=3)
-    taID = models.ForeignKey(TA, on_delete=models.CASCADE, null=True)
-
-
 class Professor(Instructor):
     pass
 
 
+class TA(Instructor):
+    pass
+
+
 class Lecture(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    lectureID = models.IntegerField()
     profID = models.ForeignKey(Professor, on_delete=models.CASCADE, null=True)
+    taID = models.ForeignKey(TA, on_delete=models.CASCADE, null=True)
+
+
+class Section(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    sectionID = models.IntegerField()
     taID = models.ForeignKey(TA, on_delete=models.CASCADE, null=True)

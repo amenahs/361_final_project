@@ -1,6 +1,7 @@
 from final_project.classes.accounts import Accounts
 from final_project.classes.assign import Assign
-from final_project.models import User, Administrator, Professor, TA, Course, AccountType
+from final_project.models import User, Administrator, Professor, TA, Course, Lecture, Section, AccountType
+from random import randint
 
 
 class Admin(Assign, Accounts):
@@ -14,11 +15,11 @@ class Admin(Assign, Accounts):
             accountExists = True
         except:
             newAcc = None
-            if account=='A':
+            if account==AccountType.Administrator:
                 newAcc = Administrator.objects.create(name=name, email=email, password=password, type=AccountType.Administrator, phoneNumber=phoneNum, homeAddress=address)
-            elif account=='P':
+            elif account==AccountType.Professor:
                 newAcc = Professor.objects.create(name=name, email=email, password=password, type=AccountType.Professor, phoneNumber=phoneNum, homeAddress=address)
-            elif account=='T':
+            elif account==AccountType.TA:
                 newAcc = TA.objects.create(name=name, email=email, password=password, type=AccountType.TA, phoneNumber=phoneNum, homeAddress=address)
             else:
                 raise TypeError("Invalid input")
@@ -29,8 +30,7 @@ class Admin(Assign, Accounts):
         if accountExists:
             raise ValueError("Account exists already")
 
-
-    def __createCourse__(self, newCourseID, newCourseName):
+    def __createCourse__(self, newCourseID, newCourseName, lectureNum, sectionNum):
         if not newCourseID or not newCourseName:
             raise TypeError("Invalid input")
 
@@ -42,6 +42,17 @@ class Admin(Assign, Accounts):
         except:
             newCourse = Course.objects.create(courseID=newCourseID, name=newCourseName)
             newCourse.save()
+
+            for i in range(0, int(lectureNum)):
+                lecID = randint(100, 999)
+                lec = Lecture.objects.create(course=newCourse, lectureID=lecID)
+                lec.save()
+
+            for j in range(0, int(sectionNum)):
+                secID = randint(100, 999)
+                sec = Section.objects.create(course=newCourse, sectionID=secID)
+                sec.save()
+
             return newCourse
         if courseExists:
             raise ValueError("Course exists already")

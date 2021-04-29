@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .models import User, Course
+from .models import User, Course, Lecture, Section
 from .classes.administrator import Admin
 # Create your views here.
 
@@ -37,7 +37,7 @@ class CreateAccount(View):
         if not request.session.get("email"):
             return redirect("/")
 
-        users = User.objects.filter()
+        users = User.objects.all()
         formattedUsers = []
         for u in users:
             formattedUsers.append((u.email, u.name, u.type, u.phoneNumber, u.homeAddress))
@@ -59,11 +59,7 @@ class CreateAccount(View):
         except TypeError:
             return render(request, "create-account.html", {"message": "Invalid input"})
         else:
-            users = User.objects.filter()
-            formattedUsers = []
-            for u in users:
-                formattedUsers.append((u.email, u.name, u.type, u.phoneNumber, u.homeAddress))
-            return render(request, "create-account.html", {"message": "Account successfully created", "users": formattedUsers})
+            return redirect("/create-account/")
 
 
 class CreateCourse(View):
@@ -71,27 +67,33 @@ class CreateCourse(View):
         if not request.session.get("email"):
             return redirect("/")
 
-        courses = Course.objects.filter()
+        courses = Course.objects.all()
         formattedCourses = []
         for c in courses:
             formattedCourses.append((c.courseID, c.name))
-        return render(request, "create-course.html", {"courses": formattedCourses})
+        lectures = Lecture.objects.all()
+        formattedLectures = []
+        for l in lectures:
+            formattedLectures.append((l.course.courseID, l.lectureID))
+        sections = Section.objects.all()
+        formattedSections = []
+        for s in sections:
+            formattedSections.append((s.course.courseID, s.sectionID))
+
+        return render(request, "create-course.html", {"courses": formattedCourses, "lectures": formattedLectures, "sections": formattedSections})
 
     def post(self, request):
         newCourseID = request.POST['courseID']
         newCourseName = request.POST['name']
+        lectureNum = request.POST['lectureNum']
+        sectionNum = request.POST['sectionNum']
         try:
             a = Admin()
-            a.__createCourse__(newCourseID, newCourseName)
+            a.__createCourse__(newCourseID, newCourseName, lectureNum, sectionNum)
         except ValueError:
             return render(request, "create-course.html", {"message": "Course already exists"})
         except TypeError:
             return render(request, "create-course.html", {"message": "Invalid input"})
         else:
-            courses = Course.objects.filter()
-            formattedCourses = []
-            for c in courses:
-                formattedCourses.append((c.courseID, c.name))
-            return render(request, "create-course.html", {"message": "Course successfully created", "courses": formattedCourses})
-
+            return redirect("/create-course/")
 
