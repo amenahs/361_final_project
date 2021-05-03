@@ -12,7 +12,7 @@ from final_project.classes.administrator import Admin
 class CreateAccountUnitTests(TestCase):
     def setUp(self):
         self.admin = Admin()
-        self.account = User.objects.create(name="name",email="username@uwm.edu", password="123", type="P", phoneNumber=1234567, homeAddress="Milwaukee, WI")
+        self.account = User.objects.create(name="name",email="username@uwm.edu", password="123", type="P", phoneNumber=123456790, homeAddress="Milwaukee, WI")
         self.prof = Professor("Prof", "prof@uwm.edu")
 
     def test_create_account(self):

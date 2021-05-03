@@ -16,9 +16,12 @@
     </table>
     <input type="submit">
 </form>
-{{ message }}
+{% if message %}
+    {{ message }}
+{% endif %}
 <br><br>
 
+<h3>Courses</h3>
 <table>
     <tr>
         <th>Course ID</th>
@@ -35,6 +38,7 @@
     {%  endif %}
 </table> <br>
 
+<h3>Lectures</h3>
 <table>
     <tr>
         <th>Course ID</th>
@@ -51,6 +55,7 @@
     {%  endif %}
 </table> <br>
 
+<h3>Sections</h3>
 <table>
     <tr>
         <th>Course ID</th>

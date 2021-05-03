@@ -22,26 +22,69 @@
     </table>
     <input type="submit">
 </form>
-{{ message }}
+{% if message %}
+    {{ message }}
+{% endif %}
 <br><br>
 
+<h3>Administrators</h3>
 <table>
     <tr>
         <th>Email</th>
         <th>Name</th>
-        <th>Type</th>
         <th>Phone Number</th>
         <th>Address</th>
     </tr>
 
-    {% if users %}
-        {% for u in users %}
+    {% if admins %}
+        {% for a in admins %}
             <tr>
-                <td>{{ u.0 }}</td>
-                <td>{{ u.1 }}</td>
-                <td>{{ u.2 }}</td>
-                <td>{{ u.3 }}</td>
-                <td>{{ u.4 }}</td>
+                <td>{{ a.0 }}</td>
+                <td>{{ a.1 }}</td>
+                <td>{{ a.2 }}</td>
+                <td>{{ a.3 }}</td>
+            </tr>
+        {% endfor %}
+    {%  endif %}
+</table> <br><br>
+
+<h3>Professors</h3>
+<table>
+    <tr>
+        <th>Email</th>
+        <th>Name</th>
+        <th>Phone Number</th>
+        <th>Address</th>
+    </tr>
+
+    {% if prof %}
+        {% for p in prof %}
+            <tr>
+                <td>{{ p.0 }}</td>
+                <td>{{ p.1 }}</td>
+                <td>{{ p.2 }}</td>
+                <td>{{ p.3 }}</td>
+            </tr>
+        {% endfor %}
+    {%  endif %}
+</table> <br><br>
+
+<h3>TAs</h3>
+<table>
+    <tr>
+        <th>Email</th>
+        <th>Name</th>
+        <th>Phone Number</th>
+        <th>Address</th>
+    </tr>
+
+    {% if tas %}
+        {% for t in tas %}
+            <tr>
+                <td>{{ t.0 }}</td>
+                <td>{{ t.1 }}</td>
+                <td>{{ t.2 }}</td>
+                <td>{{ t.3 }}</td>
             </tr>
         {% endfor %}
     {%  endif %}
