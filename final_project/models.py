@@ -36,7 +36,7 @@ class Professor(Instructor):
 
 
 class TA(Instructor):
-    pass
+    skills = models.CharField(max_length=75)
 
 
 class Lecture(models.Model):
