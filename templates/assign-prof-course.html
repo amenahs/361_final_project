@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Assign Professor to Course</title>
+</head>
+
+<body>
+<h1>Assign Professor to Course</h1>
+<form action="/assign-prof-course/" method="post">
+    {% csrf_token %}
+    <table>
+        {% if profs %}
+            <tr><td>Select Professor:   <select required name="prof">
+                {% for p in profs %}
+                <option value="{{ p.0 }}">{{ p.1 }} ({{ p.0 }})</option>
+                {% endfor %}
+            </select></td></tr>
+        {%  else %}
+            <tr><td>There are no professors to display.</td></tr>
+        {% endif %}
+        {% if lectures %}
+            <tr><td>Select Lecture:   <select required name="lecture">
+                {% for l in lectures %}
+                <option value="{{ l.0 }}">{{ l.1 }} - {{ l.2 }}, Lecture {{ l.0 }}</option>
+                {% endfor %}
+            </select></td></tr>
+        {%  else %}
+            <tr><td>There are no lectures to display.</td></tr>
+        {% endif %}
+    </table>
+    <input type="submit">
+</form> <br><br>
+
+{% if message %}
+    {{ message }}
+{% endif %} <br><br>
+
+<h3>Assigned Lectures</h3>
+<table>
+    <tr>
+        <th>Prof Name</th>
+        <th>Lecture ID</th>
+        <th>Course ID</th>
+    </tr>
+
+    {% if assignedLectures %}
+        {% for l in assignedLectures %}
+            <tr>
+                <td>{{ l.0 }}</td>
+                <td>{{ l.1 }}</td>
+                <td>{{ l.2 }}</td>
+            </tr>
+        {% endfor %}
+    {%  else %}
+            <tr><td>There are no assigned lectures to display.</td></tr>
+    {%  endif %}
+</table> <br>
+
+<br><br><br>
+    <a href="/dashboard/">Dashboard</a><br><br>
+    <form action="/" method="get">
+        <input type="submit" value="Logout"/>
+    </form>
+
+</body>
+</html>
