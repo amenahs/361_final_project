@@ -10,7 +10,7 @@
     {% csrf_token %}
     <table>
         <tr><td>Name: </td><td><input type="text" value="{{ accountName }}" name="name" required></td></tr>
-        <tr><td>Email: </td><td><input type="text" value="{{ accountEmail }}" name="email" required></td></tr>
+        <tr><td>Email: &nbsp;&nbsp; {{ accountEmail }}</td><td>
         <tr><td>Password: </td><td><input type="password" value="{{ accountPassword }}" name="password" required></td></tr>
         <tr><td>Phone Number: </td><td><input type="text" value="{{ accountPhoneNumber }}" maxlength="10" name="number" pattern="\d{10}" required></td></tr>
         <tr><td>Address: </td><td><input type="text" value="{{ accountAddress }}" name="address" required></td></tr>

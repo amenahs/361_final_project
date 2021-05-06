@@ -5,8 +5,8 @@ class UserAccount():
     def __getPublicInfo__(self):
         pass
 
-    def __editContactInfo__(self, userEmail, name, email, password, phoneNum, address, skills):
-        if not userEmail or not name or not email or not password or not address:
+    def __editContactInfo__(self, userEmail, name, password, phoneNum, address, skills):
+        if not userEmail or not name or not password or not address:
             raise TypeError("Invalid input")
 
         try:
@@ -15,9 +15,6 @@ class UserAccount():
 
             if u.name != name:
                 u.name = name
-                changesMade = True
-            if u.email != email:
-                u.email = email
                 changesMade = True
             if u.password != password:
                 u.password = password

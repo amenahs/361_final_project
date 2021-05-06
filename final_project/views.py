@@ -186,7 +186,6 @@ class EditInformation(View):
 
     def post(self, request):
         name = request.POST['name']
-        email = request.POST['email']
         password = request.POST['password']
         phoneNum = int(request.POST['number'])
         address = request.POST['address']
@@ -199,41 +198,45 @@ class EditInformation(View):
             taSkills = request.POST['skills']
         try:
             account = UserAccount()
-            changesMade = account.__editContactInfo__(u.email, name, email, password, phoneNum, address, taSkills)
+            changesMade = account.__editContactInfo__(u.email, name, password, phoneNum, address, taSkills)
+            message = 'No changes made'
+            if changesMade:
+                message = 'Information updated'
+            if isTA:
+                ta = TA.objects.get(email=u.email)
+                return render(request, "edit-information.html", {"accountName": u.name,
+                                                                 "accountEmail": u.email,
+                                                                 "accountPassword": u.password,
+                                                                 "accountPhoneNumber": u.phoneNumber,
+                                                                 "accountAddress": u.homeAddress,
+                                                                 "accountSkills": ta.skills,
+                                                                 "message": message,
+                                                                 "TA": isTA})
+
+            return render(request, "edit-information.html", {"accountName": u.name,
+                                                             "accountEmail": u.email,
+                                                             "accountPassword": u.password,
+                                                             "accountPhoneNumber": u.phoneNumber,
+                                                             "accountAddress": u.homeAddress,
+                                                             "message": message,
+                                                             "TA": isTA})
+
         except TypeError:
-            return render(request, "edit-information.html", {"accountName": u.name, "accountEmail": u.email,
+            return render(request, "edit-information.html", {"accountName": u.name,
+                                                             "accountEmail": u.email,
                                                              "accountPassword": u.password,
                                                              "accountPhoneNumber": u.phoneNumber,
                                                              "accountAddress": u.homeAddress,
                                                              "message": "Invalid input",
                                                              "TA": isTA})
         except ValueError:
-            return render(request, "edit-information.html", {"accountName": u.name, "accountEmail": u.email,
+            return render(request, "edit-information.html", {"accountName": u.name,
+                                                             "accountEmail": u.email,
                                                              "accountPassword": u.password,
                                                              "accountPhoneNumber": u.phoneNumber,
                                                              "accountAddress": u.homeAddress,
-                                                             "message": "User does not exist",
+                                                             "message": "Invalid email",
                                                              "TA": isTA})
-        message = 'No changes made'
-        if changesMade:
-            message = 'Information updated'
-        u = User.objects.get(email=email)
-        if isTA:
-            ta = TA.objects.get(email=email)
-            return render(request, "edit-information.html", {"accountName": u.name, "accountEmail": u.email,
-                                                             "accountPassword": u.password,
-                                                             "accountPhoneNumber": u.phoneNumber,
-                                                             "accountAddress": u.homeAddress,
-                                                             "accountSkills": ta.skills,
-                                                             "message": message,
-                                                             "TA": isTA})
-
-        return render(request, "edit-information.html", {"accountName": u.name, "accountEmail": u.email,
-                                                        "accountPassword": u.password,
-                                                         "accountPhoneNumber": u.phoneNumber,
-                                                         "accountAddress": u.homeAddress,
-                                                         "message": message,
-                                                         "TA": isTA})
 
 class AssignProfCourse(View):
     def get(self, request):

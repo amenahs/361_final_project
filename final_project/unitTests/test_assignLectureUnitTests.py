@@ -15,7 +15,7 @@ class AssignCourseTest(TestCase):
             self.course = Course.objects.create(courseID='361', name='Introduction to Software Engineering')
             self.lecture = Lecture.objects.create(lectureID='123', course=self.course)
 
-        def test_assign_inst(self):
+        def test_assign_prof(self):
             # test that instructor is correctly assigned to course by admin
             self.assertTrue(self.admin.__assignProfessorLecture__(self.prof.email, self.lecture.lectureID))
             #self.assertEquals(self.prof, self.lecture.profID, msg="Failed to assign professor to course correctly")

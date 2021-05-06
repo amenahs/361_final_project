@@ -28,7 +28,9 @@
         </div>
         <br>
         <button type="submit" class="btn btn-primary btn-lg" value="Login">Login</button>
-    </form>
+    </form> <br><br>
+{% if message %}
     {{ message }}
+{% endif %}
 {% endblock  %}
 

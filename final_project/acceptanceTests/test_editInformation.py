@@ -17,14 +17,14 @@ class EditInformationTests(TestCase):
     def test_validInput(self):
         response = self.client.post('/', {'email': 'username@uwm.edu', 'password': '123'})
         resp = self.client.post("/edit-information/",
-                                    {'name': 'New Name', 'email': 'username@uwm.edu', 'password': '123', 'number': 1234567890,
+                                    {'name': 'New Name','password': '123', 'number': 1234567890,
                                      'address': 'Milwaukee, WI'})
         self.assertEqual(resp.context["message"], "Information updated", msg="Failed to give information updated message with valid info")
 
     def test_noChange(self):
         response = self.client.post('/', {'email': 'username@uwm.edu', 'password': '123'})
         resp = self.client.post("/edit-information/",
-                                {'name': 'Name', 'email': 'username@uwm.edu', 'password': '123',
+                                {'name': 'Name', 'password': '123',
                                  'number': 1234567890,
                                  'address': 'Milwaukee, WI'})
         self.assertEqual(resp.context["message"], "No changes made",
@@ -33,7 +33,7 @@ class EditInformationTests(TestCase):
     def test_taAddSkills(self):
         response = self.client.post('/', {'email': 'newta@uwm.edu', 'password': 'abc'})
         resp = self.client.post("/edit-information/",
-                                {'name': 'New TA', 'email': 'ta@uwm.edu', 'password': 'abc',
+                                {'name': 'New TA', 'password': 'abc',
                                  'number': 1234567890,
                                  'address': 'Milwaukee, WI',
                                  'skills': 'Java,CSS'})

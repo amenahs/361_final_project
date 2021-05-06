@@ -37,26 +37,26 @@
 {% endif %} <br><br>
 
 <h3>Assigned Lectures</h3>
-    {% if assignedLectures %}
-        <table>
+{% if assignedLectures %}
+    <table>
+        <tr>
+            <th>Prof Name</th>
+            <th>Lecture ID</th>
+            <th>Course ID</th>
+            <th>Course Name</th>
+        </tr>
+        {% for l in assignedLectures %}
             <tr>
-                <th>Prof Name</th>
-                <th>Lecture ID</th>
-                <th>Course ID</th>
-                <th>Course Name</th>
+                <td>{{ l.0 }}</td>
+                <td>{{ l.1 }}</td>
+                <td>{{ l.2 }}</td>
+                <td>{{ l.3 }}</td>
             </tr>
-            {% for l in assignedLectures %}
-                <tr>
-                    <td>{{ l.0 }}</td>
-                    <td>{{ l.1 }}</td>
-                    <td>{{ l.2 }}</td>
-                    <td>{{ l.3 }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-    {%  else %}
-            <p>There are no assigned lectures to display.</p>
-    {%  endif %}
+        {% endfor %}
+    </table>
+{%  else %}
+    <p>There are no assigned lectures to display.</p>
+{%  endif %}
  <br>
 
 <br><br><br>

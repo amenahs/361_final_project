@@ -22,61 +22,63 @@
 <br><br>
 
 <h3>Courses</h3>
-<table>
-    <tr>
-        <th>Course ID</th>
-        <th>Name</th>
-    </tr>
+{% if courses %}
+    <table>
+        <tr>
+            <th>Course ID</th>
+            <th>Name</th>
+        </tr>
 
-    {% if courses %}
         {% for c in courses %}
             <tr>
                 <td>{{ c.0 }}</td>
                 <td>{{ c.1 }}</td>
             </tr>
         {% endfor %}
-    {%  else %}
-        <tr><td>There are no courses to display.</td></tr>
-    {%  endif %}
-</table> <br>
+    </table>
+{%  else %}
+    <tr><td>There are no courses to display.</td></tr>
+{%  endif %}
+ <br>
 
 <h3>Lectures</h3>
-<table>
-    <tr>
-        <th>Course ID</th>
-        <th>Lecture ID</th>
-    </tr>
+{% if lectures %}
+    <table>
+        <tr>
+            <th>Course ID</th>
+            <th>Lecture ID</th>
+        </tr>
 
-    {% if lectures %}
         {% for l in lectures %}
             <tr>
                 <td>{{ l.0 }}</td>
                 <td>{{ l.1 }}</td>
             </tr>
         {% endfor %}
-    {%  else %}
-        <tr><td>There are no lectures to display.</td></tr>
-    {%  endif %}
-</table> <br>
+    </table>
+{%  else %}
+    <tr><td>There are no lectures to display.</td></tr>
+{%  endif %}
+<br>
 
 <h3>Sections</h3>
-<table>
-    <tr>
-        <th>Course ID</th>
-        <th>Section ID</th>
-    </tr>
+{% if sections %}
+    <table>
+        <tr>
+            <th>Course ID</th>
+            <th>Section ID</th>
+        </tr>
 
-    {% if sections %}
         {% for s in sections %}
             <tr>
                 <td>{{ s.0 }}</td>
                 <td>{{ s.1 }}</td>
             </tr>
         {% endfor %}
-    {%  else %}
-        <tr><td>There are no sections to display.</td></tr>
-    {%  endif %}
-</table>
+    </table>
+{%  else %}
+    <tr><td>There are no sections to display.</td></tr>
+{%  endif %}
 
 <br><br><br>
     <a href="/dashboard/">Dashboard</a><br><br>
