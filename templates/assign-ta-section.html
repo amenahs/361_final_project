@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Assign TA to Section</title>
+</head>
+<body>
+<h1>Assign TA to Section</h1>
+<form action="/assign-ta-section/" method="post">
+    {% csrf_token %}
+    <table>
+        {% if tas %}
+            <tr><td>Select TA:   <select required name="ta">
+                {% for t in tas %}
+                <option value="{{ t.0 }}">{{ t.1 }} ({{ t.0 }}), Skills: {{ t.2 }}</option>
+                {% endfor %}
+            </select></td></tr>
+        {%  else %}
+            <tr><td>There are no TAs to display.</td></tr>
+        {% endif %}
+        {% if sections %}
+            <tr><td>Select Section:   <select required name="section">
+                {% for s in sections %}
+                <option value="{{ s.0 }}">{{ s.1 }} - {{ s.2 }}, Section {{ s.0 }}</option>
+                {% endfor %}
+            </select></td></tr>
+        {%  else %}
+            <tr><td>There are no sections to display.</td></tr>
+        {% endif %}
+    </table>
+    <input type="submit">
+</form> <br><br>
+
+{% if message %}
+    {{ message }}
+{% endif %} <br><br>
+
+<h3>Assigned Sections</h3>
+{% if assignedSections %}
+    <table>
+        <tr>
+            <th>TA Name</th>
+            <th>Section ID</th>
+            <th>Course ID</th>
+            <th>Course Name</th>
+        </tr>
+        {% for s in assignedSections %}
+            <tr>
+                <td>{{ s.0 }}</td>
+                <td>{{ s.1 }}</td>
+                <td>{{ s.2 }}</td>
+                <td>{{ s.3 }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{%  else %}
+    <p>There are no assigned sections to display.</p>
+{%  endif %}
+<br>
+
+<br><br><br>
+    <a href="/dashboard/">Dashboard</a><br><br>
+    <form action="/" method="get">
+        <input type="submit" value="Logout"/>
+    </form>
+</body>
+</html>

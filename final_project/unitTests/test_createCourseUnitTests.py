@@ -12,7 +12,7 @@ from final_project.classes.administrator import Admin
 class CreateCourseUnitTests(TestCase):
     def setUp(self):
         self.admin = Admin()
-        self.course = Course.objects.create(courseID=337, name='Systems Programming')
+        self.course = Course.objects.create(courseID=337, name='Systems Programming', numLectures=1, numSections=2)
 
     def test_createNewCourse_noLecNoSec(self):
         c = self.admin.__createCourse__(250, 'Introductory Programming', 0, 0)

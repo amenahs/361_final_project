@@ -305,3 +305,107 @@ class AssignProfCourse(View):
             return render(request, "assign-prof-course.html", {"lectures": formattedLectures, "profs": formattedProf,
                                                                "assignedLectures": assignedLectures,
                                                                "message": "Professor or lecture does not exist"})
+
+class AssignTACourse(View):
+    def get(self, request):
+        if not request.session.get("email"):
+            return redirect("/")
+
+        u = User.objects.get(email=request.session["email"])
+        isAdmin = u.type == AccountType.Administrator
+        if not isAdmin:
+            return redirect("/error-page/")
+
+        lectures = Lecture.objects.all()
+        formattedLectures = []
+        for l in lectures:
+            formattedLectures.append((l.lectureID, l.course.courseID, l.course.name))
+
+        tas = TA.objects.all()
+        formattedTA = []
+        for t in tas:
+            formattedTA.append((t.email, t.name, t.skills))
+
+        assignedLectures = []
+        for t in tas:
+            lecList = Lecture.objects.filter(taID=t)
+            for l in lecList:
+                assignedLectures.append((t.name, l.lectureID, l.course.courseID, l.course.name))
+
+        return render(request, "assign-ta-course.html", {"lectures": formattedLectures, "tas": formattedTA,
+                                                           "assignedLectures": assignedLectures})
+
+    def post(self, request):
+        taEmail = request.POST['ta']
+        lecID = request.POST['lecture']
+
+        lectures = Lecture.objects.all()
+        formattedLectures = []
+        for l in lectures:
+            formattedLectures.append((l.lectureID, l.course.courseID, l.course.name))
+
+        tas = TA.objects.all()
+        formattedTA = []
+        for t in tas:
+            formattedTA.append((t.email, t.name, t.skills))
+
+        assignedLectures = []
+        for t in tas:
+            lecList = Lecture.objects.filter(taID=t)
+            for l in lecList:
+                assignedLectures.append((t.name, l.lectureID, l.course.courseID, l.course.name))
+
+        try:
+            a = Admin()
+            updatedAssignment = a.__assignTALecture__(taEmail, lecID)
+
+            if updatedAssignment:
+                return redirect("/assign-ta-course/")
+
+            return render(request, "assign-ta-course.html", {"lectures": formattedLectures, "tas": formattedTA,
+                                                               "assignedLectures": assignedLectures,
+                                                               "message": "Assignment already exists"})
+        except TypeError:
+            return render(request, "assign-ta-course.html", {"lectures": formattedLectures, "tas": formattedTA,
+                                                               "assignedLectures": assignedLectures,
+                                                               "message": "Invalid input"})
+        except ValueError:
+            return render(request, "assign-ta-course.html", {"lectures": formattedLectures, "tas": formattedTA,
+                                                               "assignedLectures": assignedLectures,
+                                                               "message": "TA or lecture does not exist"})
+
+class AssignTASection(View):
+    def get(self, request):
+        if not request.session.get("email"):
+            return redirect("/")
+
+        u = User.objects.get(email=request.session["email"])
+        isAdmin = u.type == AccountType.Administrator
+        if not isAdmin:
+            return redirect("/error-page/")
+
+        sections = Section.objects.all()
+        formattedSections = []
+        for s in sections:
+            formattedSections.append((s.sectionID, s.course.courseID, s.course.name))
+
+        tas = TA.objects.all()
+        formattedTA = []
+        for t in tas:
+            formattedTA.append((t.email, t.name, t.skills))
+
+        assignedSections = []
+        for t in tas:
+            secList = Section.objects.filter(taID=t)
+            for s in secList:
+                assignedSections.append((t.name, s.lectureID, s.course.courseID, s.course.name))
+
+        return render(request, "assign-ta-section.html", {"sections": formattedSections, "tas": formattedTA,
+                                                           "assignedSections": assignedSections})
+
+    def post(self, request):
+        taEmail = request.POST['ta']
+        secID = request.POST['section']
+
+        # TODO implement actual logic
+        return redirect("/assign-ta-section/")

@@ -40,7 +40,7 @@ class Admin(Assign, Accounts):
             c = Course.objects.get(courseID=newCourseID)
             courseExists = True
         except:
-            newCourse = Course.objects.create(courseID=newCourseID, name=newCourseName)
+            newCourse = Course.objects.create(courseID=newCourseID, name=newCourseName, numLectures=lectureNum, numSections=sectionNum)
             newCourse.save()
 
             for i in range(0, int(lectureNum)):
@@ -74,5 +74,22 @@ class Admin(Assign, Accounts):
         except:
             raise ValueError("Professor or lecture does not exist")
 
-    def __accessData__(self):
+    def __assignTALecture__(self, taEmail, lecID):
+        if not taEmail or not lecID:
+            raise TypeError("Invalid input")
+        try:
+            lec = Lecture.objects.get(lectureID=lecID)
+            ta = TA.objects.get(email=taEmail)
+
+            if lec.taID != ta:
+                lec.taID = ta
+                lec.save()
+                return True
+
+            return False
+
+        except:
+            raise ValueError("TA or lecture does not exist")
+
+    def __assignTASection__(self, taEmail, secID):
         pass

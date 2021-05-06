@@ -2,22 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Assign Professor to Course</title>
+    <title>Assign TA to Course</title>
 </head>
-
 <body>
-<h1>Assign Professor to Course</h1>
-<form action="/assign-prof-course/" method="post">
+<h1>Assign TA to Course</h1>
+<form action="/assign-ta-course/" method="post">
     {% csrf_token %}
     <table>
-        {% if profs %}
-            <tr><td>Select Professor:   <select required name="prof">
-                {% for p in profs %}
-                <option value="{{ p.0 }}">{{ p.1 }} ({{ p.0 }})</option>
+        {% if tas %}
+            <tr><td>Select TA:   <select required name="ta">
+                {% for t in tas %}
+                <option value="{{ t.0 }}">{{ t.1 }} ({{ t.0 }}), Skills: {{ t.2 }}</option>
                 {% endfor %}
             </select></td></tr>
         {%  else %}
-            <tr><td>There are no professors to display.</td></tr>
+            <tr><td>There are no TAs to display.</td></tr>
         {% endif %}
         {% if lectures %}
             <tr><td>Select Lecture:   <select required name="lecture">
@@ -25,6 +24,7 @@
                 <option value="{{ l.0 }}">{{ l.1 }} - {{ l.2 }}, Lecture {{ l.0 }}</option>
                 {% endfor %}
             </select></td></tr>
+            <tr><td>Number of Allocated Sections: <input type="number" min="0" max="3" name="sectionNum" required></td></tr>
         {%  else %}
             <tr><td>There are no lectures to display.</td></tr>
         {% endif %}
@@ -40,7 +40,7 @@
 {% if assignedLectures %}
     <table>
         <tr>
-            <th>Prof Name</th>
+            <th>TA Name</th>
             <th>Lecture ID</th>
             <th>Course ID</th>
             <th>Course Name</th>
