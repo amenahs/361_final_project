@@ -35,6 +35,8 @@
                 <td>{{ c.1 }}</td>
             </tr>
         {% endfor %}
+    {%  else %}
+        <tr><td>There are no courses to display.</td></tr>
     {%  endif %}
 </table> <br>
 
@@ -52,6 +54,8 @@
                 <td>{{ l.1 }}</td>
             </tr>
         {% endfor %}
+    {%  else %}
+        <tr><td>There are no lectures to display.</td></tr>
     {%  endif %}
 </table> <br>
 
@@ -69,6 +73,8 @@
                 <td>{{ s.1 }}</td>
             </tr>
         {% endfor %}
+    {%  else %}
+        <tr><td>There are no sections to display.</td></tr>
     {%  endif %}
 </table>
 
