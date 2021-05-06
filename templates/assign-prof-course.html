@@ -43,12 +43,14 @@
                 <th>Prof Name</th>
                 <th>Lecture ID</th>
                 <th>Course ID</th>
+                <th>Course Name</th>
             </tr>
             {% for l in assignedLectures %}
                 <tr>
                     <td>{{ l.0 }}</td>
                     <td>{{ l.1 }}</td>
                     <td>{{ l.2 }}</td>
+                    <td>{{ l.3 }}</td>
                 </tr>
             {% endfor %}
         </table>

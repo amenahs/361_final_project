@@ -4,20 +4,21 @@ import os
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
 django.setup()
-from final_project.models import Administrator, Course, Professor, TA
+from final_project.models import Course, Lecture, Professor, TA
 from final_project.classes.administrator import Admin
 
 class AssignCourseTest(TestCase):
         def setUp(self):
-            self.admin = Administrator("Admin", "admin@uwm.edu")
-            self.inst = Professor("Inst", "inst@uwm.edu")
-            self.ta = TA("TA", "ta@uwm.edu")
-            self.course = Course("CS 361", [])
+            self.admin = Admin()
+            self.prof = Professor.objects.create(name="prof", email="profTest@uwm.edu", password="123", type="P",
+                                                 phoneNumber=123456789, homeAddress="Milwaukee, WI")
+            self.course = Course.objects.create(courseID='361', name='Introduction to Software Engineering')
+            self.lecture = Lecture.objects.create(lectureID='123', course=self.course)
 
         def test_assign_inst(self):
             # test that instructor is correctly assigned to course by admin
-            self.admin.assignProfessor(self.inst, self.course)
-            self.assertEquals(self.inst.userID, self.course.professorID, msg="Failed to assign professor to course correctly")
+            self.assertTrue(self.admin.__assignProfessorLecture__(self.prof.email, self.lecture.lectureID))
+            #self.assertEquals(self.prof, self.lecture.profID, msg="Failed to assign professor to course correctly")
 
         def test_assign_ta(self):
             # test that ta is correctly assigned to course by admin

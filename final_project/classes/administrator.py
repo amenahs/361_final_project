@@ -57,5 +57,22 @@ class Admin(Assign, Accounts):
         if courseExists:
             raise ValueError("Course exists already")
 
+    def __assignProfessorLecture__(self, profEmail, lecID):
+        if not profEmail or not lecID:
+            raise TypeError("Invalid input")
+        try:
+            lec = Lecture.objects.get(lectureID=lecID)
+            prof = Professor.objects.get(email=profEmail)
+
+            if lec.profID != prof:
+                lec.profID = prof
+                lec.save()
+                return True
+
+            return False
+
+        except:
+            raise ValueError("Professor or lecture does not exist")
+
     def __accessData__(self):
         pass

@@ -257,14 +257,48 @@ class AssignProfCourse(View):
 
         assignedLectures = []
         for p in prof:
-            lecList = Lecture.objects.filter(profID = p)
+            lecList = Lecture.objects.filter(profID=p)
             for l in lecList:
-                assignedLectures.append((p.name, l.lectureID, l.course.courseID))
+                assignedLectures.append((p.name, l.lectureID, l.course.courseID, l.course.name))
 
         return render(request, "assign-prof-course.html", {"lectures": formattedLectures, "profs": formattedProf,
                                                            "assignedLectures": assignedLectures})
 
     def post(self, request):
-        # TODO actually assign the prof to the course/lecture!
-        return redirect("/assign-prof-course/")
+        profEmail = request.POST['prof']
+        lecID = request.POST['lecture']
 
+        lectures = Lecture.objects.all()
+        formattedLectures = []
+        for l in lectures:
+            formattedLectures.append((l.lectureID, l.course.courseID, l.course.name))
+
+        prof = Professor.objects.all()
+        formattedProf = []
+        for p in prof:
+            formattedProf.append((p.email, p.name))
+
+        assignedLectures = []
+        for p in prof:
+            lecList = Lecture.objects.filter(profID=p)
+            for l in lecList:
+                assignedLectures.append((p.name, l.lectureID, l.course.courseID, l.course.name))
+
+        try:
+            a = Admin()
+            updatedAssignment = a.__assignProfessorLecture__(profEmail, lecID)
+
+            if updatedAssignment:
+                return redirect("/assign-prof-course/")
+
+            return render(request, "assign-prof-course.html", {"lectures": formattedLectures, "profs": formattedProf,
+                                                               "assignedLectures": assignedLectures,
+                                                               "message": "Assignment already exists"})
+        except TypeError:
+            return render(request, "assign-prof-course.html", {"lectures": formattedLectures, "profs": formattedProf,
+                                                               "assignedLectures": assignedLectures,
+                                                               "message": "Invalid input"})
+        except ValueError:
+            return render(request, "assign-prof-course.html", {"lectures": formattedLectures, "profs": formattedProf,
+                                                               "assignedLectures": assignedLectures,
+                                                               "message": "Professor or lecture does not exist"})
