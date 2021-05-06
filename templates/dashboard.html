@@ -1,52 +1,65 @@
-% extends "base.html" %}
+{% extends "base.html" %}
 
-{%  block content %}<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Profile</a>
-        </li>
-          <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Courses
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="#">View</a></li>
-            <li><a class="dropdown-item" href="#">Edit</a></li>
-            <li><a class="dropdown-item" href="#">Create</a></li>
-          </ul>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Accounts
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="#">View</a></li>
-            <li><a class="dropdown-item" href="#">Edit</a></li>
-            <li><a class="dropdown-item" href="#">Create</a></li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
+{%  block content %}
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Scheduler</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/dashboard/">Home</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Accounts
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li><a class="dropdown-item" href="/view-account/">View</a></li>
+                            <li><a class="dropdown-item" href="/edit-account/">Edit</a></li>
+                            <li><a class="dropdown-item" href="/create-account/">Create</a></li>
+                        </ul>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Courses
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li><a class="dropdown-item" href="/view-course/">View</a></li>
+                            <li><a class="dropdown-item" href="/edit-course/">Edit</a></li>
+                            <li><a class="dropdown-item" href="/create-course/">Create</a></li>
+                        </ul>
+
+                        <ul class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <li class="nav-item">
+                                    <a class="nav-link active" aria-current="page" href="/edit-information/">Profile</a>
+                                </li>
+                            </ul>
+
+                            <form class="d-flex">
+                                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                                <button class="btn btn-outline-success" type="submit">Search</button>
+                            </form>
+                        </ul>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <form action="/" method="get">
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button type="submit" class="btn btn-warning">LogOut</button>
+        </div>
+    </form>
+
 {% endblock  %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Dashboard</title>
-</head>
-
-<style>
-
-</style>
 
 <h1>Dashboard</h1>
 {% if isAdmin %}
@@ -56,11 +69,11 @@
     <a href="/create-course/">View/Create Courses</a><br><br>
     <a href="/assign-prof-course/">Assign Professor to Course</a><br><br>
 {% endif %}
-    <p style="font-weight:bold">My Account</p>
-    <a href="/edit-information/">View/Edit My Account</a><br><br>
+<p style="font-weight:bold">My Account</p>
+<a href="/edit-information/">View/Edit My Account</a><br><br>
 <br><br><br>
-    <form action="/" method="get">
-        <input type="submit" value="Logout"/>
-    </form>
+<form action="/" method="get">
+    <input type="submit" value="Logout"/>
+</form>
 </body>
 </html>
