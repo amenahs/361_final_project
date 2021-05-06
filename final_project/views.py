@@ -17,10 +17,8 @@ class Home(View):
             badPassword = (m.password != request.POST['password'])
         except:
             noSuchUser = True
-        if noSuchUser:
-            return render(request, "home.html", {"message": "User does not exist"})
-        elif badPassword:
-            return render(request, "home.html", {"message": "Bad password"})
+        if noSuchUser or badPassword:
+            return render(request, "home.html", {"message": "Email and password combination does not exist"})
         else:
             request.session["email"] = m.email
             return redirect("/dashboard/")
@@ -35,6 +33,12 @@ class Dashboard(View):
         return render(request, "dashboard.html", {'isAdmin': isAdmin})
 
 
+class Error(View):
+    def get(self, request):
+        if not request.session.get("email"):
+            return redirect("/")
+        return render(request, "error-page.html")
+
 class CreateAccount(View):
     def get(self, request):
         if not request.session.get("email"):
@@ -43,7 +47,7 @@ class CreateAccount(View):
         u = User.objects.get(email=request.session["email"])
         isAdmin = u.type==AccountType.Administrator
         if not isAdmin:
-            return redirect("/dashboard/")
+            return redirect("/error-page/")
 
         admins = Administrator.objects.all()
         formattedAdmins = []
@@ -107,7 +111,7 @@ class CreateCourse(View):
         u = User.objects.get(email=request.session["email"])
         isAdmin = u.type==AccountType.Administrator
         if not isAdmin:
-            return redirect("/dashboard/")
+            return redirect("/error-page/")
 
         courses = Course.objects.all()
         formattedCourses = []
@@ -239,7 +243,7 @@ class AssignProfCourse(View):
         u = User.objects.get(email=request.session["email"])
         isAdmin = u.type == AccountType.Administrator
         if not isAdmin:
-            return redirect("/dashboard/")
+            return redirect("/error-page/")
 
         lectures = Lecture.objects.all()
         formattedLectures = []

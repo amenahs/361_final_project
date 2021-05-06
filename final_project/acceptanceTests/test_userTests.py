@@ -14,25 +14,25 @@ class UserLoginTestClass(TestCase):
     # test no password entered
     def test_noPassword(self):
         resp = self.client.post('/', {'email': 'user@gmail.com', 'password': ''})
-        self.assertEqual(resp.context["message"], "Bad password",
+        self.assertEqual(resp.context["message"], "Email and password combination does not exist",
                          msg="No password entered did not result in error message")
 
     # test other user's password
     def test_otherUserPassword(self):
         resp = self.client.post("/", {'email': 'user@gmail.com', 'password': '5678'})
-        self.assertEqual(resp.context["message"], "Bad password",
+        self.assertEqual(resp.context["message"], "Email and password combination does not exist",
                          msg="Another user's password entered did not result in error message")
 
     # test altogether the wrong password
     def test_wrongPassword(self):
         resp = self.client.post("/", {'email': 'user@gmail.com', 'password': 'hello'})
-        self.assertEqual(resp.context["message"], "Bad password",
+        self.assertEqual(resp.context["message"], "Email and password combination does not exist",
                          msg="Incorrect password entered did not result in error message")
 
     # test invalid username
     def test_noUser(self):
         resp = self.client.post("/", {'email': 'myemail@gmail.com', 'password': '5678'})
-        self.assertEqual(resp.context["message"], "User does not exist",
+        self.assertEqual(resp.context["message"], "Email and password combination does not exist",
                          msg="Invalid username entered did not result in error message")
 
     # test valid login
