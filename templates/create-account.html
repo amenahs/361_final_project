@@ -1,3 +1,35 @@
+{% extends "base.html" %}
+
+{%  block content %}
+<form action="/create-account/" method="post">
+    {% csrf_token %}
+<h1>Create Account</h1>
+        <div class="form-floating">
+            <input type="text" name="name" class="form-control" id="floatingInput" placeholder="First Last" required>
+            <label for="floatingInput">Name</label>
+        </div>
+        <div class="form-floating">
+            <input type="email" name="email" class="form-control" id="floatingInput" placeholder="name@example.com" required>
+            <label for="floatingInput">Email address</label>
+        </div>
+        <div class="form-floating">
+            <input type="password" class="form-control" name="password" id="floatingPassword" placeholder="Password" required>
+            <label for="floatingPassword">Password</label>
+        </div>
+        <div class="form-floating">
+            <input type="text" maxlength="10" name="number" pattern="\d{10}" class="form-control" id="floatingInput" placeholder="1234567890" required>
+            <label for="floatingInput">Phone Number</label>
+        </div>
+        <div class="form-floating">
+            <input type="text" name="address" class="form-control" id="floatingInput" placeholder="1234 Rainbow Road, Milwaukee, WI 53202" required>
+            <label for="floatingInput">Address</label>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary btn-lg" value="Submit">Submit</button>
+    </form>
+</form>
+{% endblock  %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
