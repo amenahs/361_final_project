@@ -2,13 +2,13 @@ from abc import ABC, abstractmethod
 
 class Assign():
     @abstractmethod
-    def __assignProfessor__(self):
+    def __assignProfessorLecture__(self, profEmail, lecID):
          pass
 
     @abstractmethod
-    def __assignTACourse__(self):
+    def __assignTALecture__(self, taEmail, lecID):
          pass
 
     @abstractmethod
-    def __assignTALab__(self):
+    def __assignTASection__(self, taEmail, secID):
         pass

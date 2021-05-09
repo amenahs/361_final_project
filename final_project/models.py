@@ -21,10 +21,12 @@ class User(models.Model):
 class Course(models.Model):
     courseID = models.IntegerField()
     name = models.CharField(max_length=40)
+    numLectures = models.IntegerField()
+    numSections = models.IntegerField()
 
 
 class Instructor(User):
-    coursesTaught = models.ForeignKey(Course, on_delete=models.CASCADE, null=True)
+    pass
 
 
 class Administrator(User):

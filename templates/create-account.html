@@ -60,15 +60,15 @@
 <br><br>
 
 <h3>Administrators</h3>
-<table>
-    <tr>
-        <th>Email</th>
-        <th>Name</th>
-        <th>Phone Number</th>
-        <th>Address</th>
-    </tr>
+{% if admins %}
+    <table>
+        <tr>
+            <th>Email</th>
+            <th>Name</th>
+            <th>Phone Number</th>
+            <th>Address</th>
+        </tr>
 
-    {% if admins %}
         {% for a in admins %}
             <tr>
                 <td>{{ a.0 }}</td>
@@ -77,21 +77,22 @@
                 <td>{{ a.3 }}</td>
             </tr>
         {% endfor %}
-    {%  else %}
-        <tr><td>There are no administrators to display.</td></tr>
-    {%  endif %}
-</table> <br><br>
+    </table>
+{%  else %}
+    <tr><td>There are no administrators to display.</td></tr>
+{%  endif %}
+<br><br>
 
 <h3>Professors</h3>
-<table>
-    <tr>
-        <th>Email</th>
-        <th>Name</th>
-        <th>Phone Number</th>
-        <th>Address</th>
-    </tr>
+{% if prof %}
+    <table>
+        <tr>
+            <th>Email</th>
+            <th>Name</th>
+            <th>Phone Number</th>
+            <th>Address</th>
+        </tr>
 
-    {% if prof %}
         {% for p in prof %}
             <tr>
                 <td>{{ p.0 }}</td>
@@ -100,21 +101,22 @@
                 <td>{{ p.3 }}</td>
             </tr>
         {% endfor %}
-    {%  else %}
-        <tr><td>There are no professors to display.</td></tr>
-    {%  endif %}
-</table> <br><br>
+    </table>
+{%  else %}
+    <tr><td>There are no professors to display.</td></tr>
+{%  endif %}
+<br><br>
 
 <h3>TAs</h3>
-<table>
-    <tr>
-        <th>Email</th>
-        <th>Name</th>
-        <th>Phone Number</th>
-        <th>Address</th>
-    </tr>
+{% if tas %}
+    <table>
+        <tr>
+            <th>Email</th>
+            <th>Name</th>
+            <th>Phone Number</th>
+            <th>Address</th>
+        </tr>
 
-    {% if tas %}
         {% for t in tas %}
             <tr>
                 <td>{{ t.0 }}</td>
@@ -123,10 +125,10 @@
                 <td>{{ t.3 }}</td>
             </tr>
         {% endfor %}
-    {%  else %}
-        <tr><td>There are no TAs to display.</td></tr>
-    {%  endif %}
-</table>
+    </table>
+{%  else %}
+    <tr><td>There are no TAs to display.</td></tr>
+{%  endif %}
 
 <br><br><br>
     <a href="/dashboard/">Dashboard</a><br><br>

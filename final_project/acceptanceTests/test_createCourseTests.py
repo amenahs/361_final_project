@@ -8,7 +8,7 @@ class CreateCourseTests(TestCase):
     def setUp(self):
         self.client = Client()
         self.admin = Admin()
-        self.course = Course.objects.create(courseID=361, name='Introduction to Software Engineering')
+        self.course = Course.objects.create(courseID=361, name='Introduction to Software Engineering', numLectures=1, numSections=3)
 
     def test_createCourseExisting(self):
         resp = self.client.post('/create-course/', {'courseID': 361, 'name': 'Introduction to Software Engineering', 'lectureNum': 1, 'sectionNum': 3})
