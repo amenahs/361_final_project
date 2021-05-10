@@ -43,6 +43,7 @@
             <th>Lecture ID</th>
             <th>Course ID</th>
             <th>Course Name</th>
+            <th>Allocated Sections</th>
         </tr>
         {% for l in assignedLectures %}
             <tr>
@@ -50,6 +51,7 @@
                 <td>{{ l.1 }}</td>
                 <td>{{ l.2 }}</td>
                 <td>{{ l.3 }}</td>
+                <td>{{ l.4 }}</td>
             </tr>
         {% endfor %}
     </table>

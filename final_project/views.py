@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .models import User, Administrator, Professor, TA, Course, Lecture, Section, AccountType
+from .models import User, Administrator, Professor, TA, Course, Lecture, Section, AccountType, TASectionAllocation
 from .classes.administrator import Admin
 from .classes.user import UserAccount
 
@@ -338,7 +338,11 @@ class AssignTACourse(View):
         for t in tas:
             lecList = Lecture.objects.filter(taID=t)
             for l in lecList:
-                assignedLectures.append((t.name, l.lectureID, l.course.courseID, l.course.name))
+                allocation = TASectionAllocation.objects.filter(ta=t, lec=l)
+                allocationNum = 0
+                for al in allocation:
+                    allocationNum += al.numSections
+                assignedLectures.append((t.name, l.lectureID, l.course.courseID, l.course.name, allocationNum))
 
         return render(request, "assign-ta-course.html", {"lectures": formattedLectures, "tas": formattedTA,
                                                          "assignedLectures": assignedLectures})
@@ -359,9 +363,13 @@ class AssignTACourse(View):
 
         assignedLectures = []
         for t in tas:
-            lecList = Lecture.objects.filter(taID=t)
+            lecList = Lecture.objects.filter(taID__in=[t])
             for l in lecList:
-                assignedLectures.append((t.name, l.lectureID, l.course.courseID, l.course.name))
+                allocation = TASectionAllocation.objects.filter(ta=t, lec=l)
+                allocationNum = 0
+                for al in allocation:
+                    allocationNum += al.numSections
+                assignedLectures.append((t.name, l.lectureID, l.course.courseID, l.course.name, allocationNum))
 
         try:
             a = Admin()
@@ -369,12 +377,10 @@ class AssignTACourse(View):
 
             if updatedAssignment:
                 ta = TA.objects.get(email=taEmail)
-                assignedTA = []
-                assignedTA.append(ta.name, ta.email)
+                assignedTA = (ta.name, ta.email)
 
-                lec = Lecture.objects.get(lecID=lecID)
-                assignedLecture = []
-                assignedLecture.append(lec.lectureID, lec.course.courseID, lec.course.name)
+                lec = Lecture.objects.get(lectureID=lecID)
+                assignedLecture = (lec.lectureID, lec.course.courseID, lec.course.name)
 
                 sectionMax = lec.course.numSections
 
@@ -406,12 +412,44 @@ class AllocateSections(View):
         if not isAdmin:
             return redirect("/error-page/")
 
-        return render(request, "allocate-sections.html", {'isAllocation': False})
+        return render(request, "allocate-sections.html", {'isAllocation': False,
+                                                          'message': 'Please assign a TA to a course first.'})
 
     def post(self, request):
-        #TODO implement!
+        sectionNum = request.POST['sectionNum']
+        taEmail = request.POST['taEmail']
+        lecID = request.POST['lecID']
 
-        return redirect("/assign-ta-course/")
+        message = ""
+        try:
+            a = Admin()
+            isAllocated = a.__allocateSections__(taEmail, lecID, int(sectionNum))
+
+            return redirect("/assign-ta-course/")
+
+        except TypeError:
+            message = "Invalid input"
+            return render(request, "allocate-sections.html", {'isAllocation': False,
+                                                              'message': message})
+        except ValueError:
+            message = "TA or lecture does not exist"
+            return render(request, "allocate-sections.html", {'isAllocation': False,
+                                                              'message': message})
+        except SyntaxError:
+            message = "Invalid number of sections selected"
+            ta = TA.objects.get(email=taEmail)
+            assignedTA = (ta.name, ta.email)
+
+            lec = Lecture.objects.get(lectureID=lecID)
+            assignedLecture = (lec.lectureID, lec.course.courseID, lec.course.name)
+
+            sectionMax = lec.course.numSections
+
+            return render(request, "allocate-sections.html", {'isAllocation': True,
+                                                              'assignedTA': assignedTA,
+                                                              'assignedLec': assignedLecture,
+                                                              'sectionMax': sectionMax,
+                                                              'message': message})
 
 
 class AssignTASection(View):

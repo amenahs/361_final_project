@@ -17,7 +17,7 @@
             <label for="floatingPassword">Number of Lectures</label>
         </div>
         <div class="form-floating">
-            <input type="number" min="-1"  name="sectionNum" class="form-control"id=floatingInput" placeholder="Number of Sections" required>
+            <input type="number" min="0"  name="sectionNum" class="form-control"id=floatingInput" placeholder="Number of Sections" required>
             <label for="floatingPassword">Number of Sections</label>
         </div>
         <br>
@@ -27,8 +27,9 @@
     {% if message %}
         {{ message }}
     {% endif %}
-    {% if courses %}
+
 <h3>Courses</h3>
+    {% if courses %}
         <table class="table">
   <thead>
     <tr>
