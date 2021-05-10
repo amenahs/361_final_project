@@ -3,12 +3,15 @@ from django.views import View
 from .models import User, Administrator, Professor, TA, Course, Lecture, Section, AccountType
 from .classes.administrator import Admin
 from .classes.user import UserAccount
+
+
 # Create your views here.
 
 class Home(View):
     def get(self, request):
         request.session.pop("email", None)
         return render(request, "home.html", {})
+
     def post(self, request):
         noSuchUser = False
         badPassword = False
@@ -29,7 +32,7 @@ class Dashboard(View):
         if not request.session.get("email"):
             return redirect("/")
         u = User.objects.get(email=request.session["email"])
-        isAdmin = u.type==AccountType.Administrator
+        isAdmin = u.type == AccountType.Administrator
         return render(request, "dashboard.html", {'isAdmin': isAdmin})
 
 
@@ -39,13 +42,14 @@ class Error(View):
             return redirect("/")
         return render(request, "error-page.html")
 
+
 class CreateAccount(View):
     def get(self, request):
         if not request.session.get("email"):
             return redirect("/")
 
         u = User.objects.get(email=request.session["email"])
-        isAdmin = u.type==AccountType.Administrator
+        isAdmin = u.type == AccountType.Administrator
         if not isAdmin:
             return redirect("/error-page/")
 
@@ -109,7 +113,7 @@ class CreateCourse(View):
             return redirect("/")
 
         u = User.objects.get(email=request.session["email"])
-        isAdmin = u.type==AccountType.Administrator
+        isAdmin = u.type == AccountType.Administrator
         if not isAdmin:
             return redirect("/error-page/")
 
@@ -126,7 +130,8 @@ class CreateCourse(View):
         for s in sections:
             formattedSections.append((s.course.courseID, s.sectionID))
 
-        return render(request, "create-course.html", {"courses": formattedCourses, "lectures": formattedLectures, "sections": formattedSections})
+        return render(request, "create-course.html",
+                      {"courses": formattedCourses, "lectures": formattedLectures, "sections": formattedSections})
 
     def post(self, request):
         newCourseID = request.POST['courseID']
@@ -161,6 +166,7 @@ class CreateCourse(View):
         else:
             return redirect("/create-course/")
 
+
 class EditInformation(View):
     def get(self, request):
         if not request.session.get("email"):
@@ -179,10 +185,10 @@ class EditInformation(View):
                                                              "TA": isTA})
 
         return render(request, "edit-information.html", {"accountName": u.name, "accountEmail": u.email,
-                                                            "accountPassword": u.password,
-                                                            "accountPhoneNumber": u.phoneNumber,
-                                                            "accountAddress": u.homeAddress,
-                                                            "TA": isTA})
+                                                         "accountPassword": u.password,
+                                                         "accountPhoneNumber": u.phoneNumber,
+                                                         "accountAddress": u.homeAddress,
+                                                         "TA": isTA})
 
     def post(self, request):
         name = request.POST['name']
@@ -237,6 +243,7 @@ class EditInformation(View):
                                                              "accountAddress": u.homeAddress,
                                                              "message": "Invalid email",
                                                              "TA": isTA})
+
 
 class AssignProfCourse(View):
     def get(self, request):
@@ -306,6 +313,7 @@ class AssignProfCourse(View):
                                                                "assignedLectures": assignedLectures,
                                                                "message": "Professor or lecture does not exist"})
 
+
 class AssignTACourse(View):
     def get(self, request):
         if not request.session.get("email"):
@@ -333,7 +341,7 @@ class AssignTACourse(View):
                 assignedLectures.append((t.name, l.lectureID, l.course.courseID, l.course.name))
 
         return render(request, "assign-ta-course.html", {"lectures": formattedLectures, "tas": formattedTA,
-                                                           "assignedLectures": assignedLectures})
+                                                         "assignedLectures": assignedLectures})
 
     def post(self, request):
         taEmail = request.POST['ta']
@@ -363,16 +371,17 @@ class AssignTACourse(View):
                 return redirect("/assign-ta-course/")
 
             return render(request, "assign-ta-course.html", {"lectures": formattedLectures, "tas": formattedTA,
-                                                               "assignedLectures": assignedLectures,
-                                                               "message": "Assignment already exists"})
+                                                             "assignedLectures": assignedLectures,
+                                                             "message": "Assignment already exists"})
         except TypeError:
             return render(request, "assign-ta-course.html", {"lectures": formattedLectures, "tas": formattedTA,
-                                                               "assignedLectures": assignedLectures,
-                                                               "message": "Invalid input"})
+                                                             "assignedLectures": assignedLectures,
+                                                             "message": "Invalid input"})
         except ValueError:
             return render(request, "assign-ta-course.html", {"lectures": formattedLectures, "tas": formattedTA,
-                                                               "assignedLectures": assignedLectures,
-                                                               "message": "TA or lecture does not exist"})
+                                                             "assignedLectures": assignedLectures,
+                                                             "message": "TA or lecture does not exist"})
+
 
 class AssignTASection(View):
     def get(self, request):
@@ -401,7 +410,7 @@ class AssignTASection(View):
                 assignedSections.append((t.name, s.lectureID, s.course.courseID, s.course.name))
 
         return render(request, "assign-ta-section.html", {"sections": formattedSections, "tas": formattedTA,
-                                                           "assignedSections": assignedSections})
+                                                          "assignedSections": assignedSections})
 
     def post(self, request):
         taEmail = request.POST['ta']
