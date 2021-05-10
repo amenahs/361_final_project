@@ -24,7 +24,6 @@
                 <option value="{{ l.0 }}">{{ l.1 }} - {{ l.2 }}, Lecture {{ l.0 }}</option>
                 {% endfor %}
             </select></td></tr>
-            <tr><td>Number of Allocated Sections: <input type="number" min="0" max="3" name="sectionNum" required></td></tr>
         {%  else %}
             <tr><td>There are no lectures to display.</td></tr>
         {% endif %}

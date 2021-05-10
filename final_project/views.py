@@ -368,7 +368,20 @@ class AssignTACourse(View):
             updatedAssignment = a.__assignTALecture__(taEmail, lecID)
 
             if updatedAssignment:
-                return redirect("/assign-ta-course/")
+                ta = TA.objects.get(email=taEmail)
+                assignedTA = []
+                assignedTA.append(ta.name, ta.email)
+
+                lec = Lecture.objects.get(lecID=lecID)
+                assignedLecture = []
+                assignedLecture.append(lec.lectureID, lec.course.courseID, lec.course.name)
+
+                sectionMax = lec.course.numSections
+
+                return render(request, "allocate-sections.html", {'isAllocation': True,
+                                                                  'assignedTA': assignedTA,
+                                                                  'assignedLec': assignedLecture,
+                                                                  'sectionMax': sectionMax})
 
             return render(request, "assign-ta-course.html", {"lectures": formattedLectures, "tas": formattedTA,
                                                              "assignedLectures": assignedLectures,
@@ -381,6 +394,24 @@ class AssignTACourse(View):
             return render(request, "assign-ta-course.html", {"lectures": formattedLectures, "tas": formattedTA,
                                                              "assignedLectures": assignedLectures,
                                                              "message": "TA or lecture does not exist"})
+
+
+class AllocateSections(View):
+    def get(self, request):
+        if not request.session.get("email"):
+            return redirect("/")
+
+        u = User.objects.get(email=request.session["email"])
+        isAdmin = u.type == AccountType.Administrator
+        if not isAdmin:
+            return redirect("/error-page/")
+
+        return render(request, "allocate-sections.html", {'isAllocation': False})
+
+    def post(self, request):
+        #TODO implement!
+
+        return redirect("/assign-ta-course/")
 
 
 class AssignTASection(View):
