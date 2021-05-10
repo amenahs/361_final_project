@@ -2,61 +2,108 @@
 
 {%  block content %}
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <style>
+        .navbar {
+            width: 100%
+
+        }
+    </style>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Scheduler</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/dashboard/">Home</a>
+                    <li class="nav-item navbar-light">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
                     </li>
-
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Accounts
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="/view-account/">View</a></li>
                             <li><a class="dropdown-item" href="/edit-account/">Edit</a></li>
                             <li><a class="dropdown-item" href="/create-account/">Create</a></li>
                         </ul>
-
+                    </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Courses
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="/view-course/">View</a></li>
                             <li><a class="dropdown-item" href="/edit-course/">Edit</a></li>
                             <li><a class="dropdown-item" href="/create-course/">Create</a></li>
                         </ul>
-
-                        <ul class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                                <li class="nav-item">
-                                    <a class="nav-link active" aria-current="page" href="/edit-information/">Profile</a>
-                                </li>
-                            </ul>
-
-                            <form class="d-flex">
-                                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                                <button class="btn btn-outline-success" type="submit">Search</button>
-                            </form>
-                        </ul>
+                    <li class="nav-item navbar-light">
+                        <a class="nav-link active" aria-current="page" href="/edit-information/">Profile</a>
+                    </li>
+                    </li>
                 </ul>
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit">Search</button>
+                </form>
             </div>
         </div>
     </nav>
 
-    <form action="/" method="get">
+    <p class="fs-1">Welcome, !</p><br>
+
+    <style>
+        #signout {
+            position: fixed;
+            right: 5%;
+            bottom: 10%;
+        }
+    </style>
+
+    <div class="form-group" style="margin-top: 12%; float:right; position: relative; ">
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-            <button type="submit" class="btn btn-warning">LogOut</button>
+            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="signout">Sign Out</button>
         </div>
-    </form>
+    </div>
+
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Signing Out</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to sign out?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Go Back</button>
+                    <form action="/" method="get">
+                        <button type="submit" class="btn btn-warning">Sign Out</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .footer {
+            position: fixed;
+            height: auto;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: #F0F0F0;
+            color: white;
+            text-align: center;
+        }
+    </style>
+
+    <footer class="footer">
+        <span class="text-muted">University of Wisconsin Milwaukee Course Scheduler</span>
+    </footer>
 
 {% endblock  %}
 

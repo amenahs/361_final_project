@@ -3,29 +3,42 @@
 {%  block content %}
 <form action="/create-account/" method="post">
     {% csrf_token %}
-<h1>Create Account</h1>
+<br><h1>Create Account</h1><br>
         <div class="form-floating">
             <input type="text" name="name" class="form-control" id="floatingInput" placeholder="First Last" required>
             <label for="floatingInput">Name</label>
-        </div>
+        </div><br>
         <div class="form-floating">
             <input type="email" name="email" class="form-control" id="floatingInput" placeholder="name@example.com" required>
             <label for="floatingInput">Email address</label>
-        </div>
+        </div><br>
         <div class="form-floating">
             <input type="password" class="form-control" name="password" id="floatingPassword" placeholder="Password" required>
             <label for="floatingPassword">Password</label>
-        </div>
+        </div><br>
         <div class="form-floating">
             <input type="text" maxlength="10" name="number" pattern="\d{10}" class="form-control" id="floatingInput" placeholder="1234567890" required>
             <label for="floatingInput">Phone Number</label>
-        </div>
+        </div><br>
         <div class="form-floating">
             <input type="text" name="address" class="form-control" id="floatingInput" placeholder="1234 Rainbow Road, Milwaukee, WI 53202" required>
             <label for="floatingInput">Address</label>
-        </div>
-        <br>
-        <button type="submit" class="btn btn-primary btn-lg" value="Submit">Submit</button>
+        </div><br>
+
+
+        <div class="form-floating">
+            <label for="Type">Type of account</label>
+            <select class="type" placeholder="Type">
+                <option value=""></option>
+                <option value="Administrator">Administrator</option>
+                <option value="Professor">Professor</option>
+                <option value="Teaching Assistant (TA)">Teaching Assistant (TA)</option>
+            </select>
+        </div><br>
+
+
+        <button type="submit" class="btn btn-primary" value="Submit">Submit</button>
+        <a class="btn btn-dark" href="/dashboard/" role="button">Dashboard</a><br><br><br>
     </form>
 </form>
 {% endblock  %}
@@ -38,21 +51,22 @@
 </head>
 <body>
 <h1>Create Accounts</h1>
-<form action="/create-account/" method="post">
+<form action="/create-account/" method="post"><br>
     {% csrf_token %}
+
     <table>
-        <tr><td>Name: </td><td><input type="text" name="name" required></td></tr>
-        <tr><td>Email: </td><td><input type="email" name="email" required></td></tr>
-        <tr><td>Password: </td><td><input type="password" name="password" required></td></tr>
-        <tr><td>Phone Number: </td><td><input type="text" maxlength="10" name="number" pattern="\d{10}" required></td></tr>
-        <tr><td>Address: </td><td><input type="text" name="address" required></td></tr>
+        <tr><td>Name: </td><td><input type="text" name="name" required></td></tr><br>
+        <tr><td>Email: </td><td><input type="email" name="email" required></td></tr><br>
+        <tr><td>Password: </td><td><input type="password" name="password" required></td></tr><br>
+        <tr><td>Phone Number: </td><td><input type="text" maxlength="10" name="number" pattern="\d{10}" required></td></tr><br>
+        <tr><td>Address: </td><td><input type="text" name="address" required></td></tr><br>
         <tr><td>Type:   <select required name="type">
             <option value="A">Administrator</option>
             <option value="P">Professor</option>
             <option value="T">TA</option>
         </select></td></tr>
     </table>
-    <input type="submit">
+    <input type="submit"><br>
 </form>
 {% if message %}
     {{ message }}
