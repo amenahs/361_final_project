@@ -7,10 +7,11 @@ django.setup()
 from final_project.models import Course, Lecture, Administrator, Professor, TA, AccountType
 from final_project.classes.administrator import Admin
 
+
 class AssignCourseTest(TestCase):
         def setUp(self):
             self.admin = Admin()
-            self.systemAdmin = Administrator.objects.create(name="prof", email="adminTest@uwm.edu", password="123", type=AccountType.Professor,
+            self.systemAdmin = Administrator.objects.create(name="prof", email="adminTest@uwm.edu", password="123", type=AccountType.Administrator,
                                                  phoneNumber=123456789, homeAddress="Milwaukee, WI")
             self.prof = Professor.objects.create(name="prof", email="profTest@uwm.edu", password="123", type=AccountType.Professor,
                                                  phoneNumber=123456789, homeAddress="Milwaukee, WI")

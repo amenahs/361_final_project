@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Allocate Sections</title>
+</head>
+<body>
+<h1>Allocate Sections to TA</h1>
+{% if isAllocation %}
+    <form action="/allocate-sections/" method="post">
+        {% csrf_token %}
+        <table>
+            <tr><td>Assigned TA: {{ assignedTA.0 }}, {{ assignedTA.1 }}
+                <input hidden type="text" name="taEmail" value="{{ assignedTA.1 }}" placeholder="TA" readonly required>
+            </td></tr>
+            <tr><td>Assigned Lecture: {{ assignedLec.0 }}, Course {{ assignedLec.1 }}: {{ assignedLec.2 }}
+                <input hidden type="text" name="lecID" value="{{ assignedLec.0 }}" placeholder="Lecture ID" readonly required>
+            </td></tr>
+            <tr><td>Maximum Number of Sections: {{ sectionMax }}</td></tr>
+            <tr><td>Number of Allocated Sections:
+                <input type="number" min="0" max="{{ sectionMax }}" name="sectionNum" required>
+            </td></tr>
+        </table>
+        <input type="submit">
+    </form>
+    <br><br>
+{% endif %}
+
+{% if message %}
+    {{ message }}
+{% endif %} <br><br>
+</body>
+</html>
