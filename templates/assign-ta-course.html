@@ -28,7 +28,9 @@
             <tr><td>There are no lectures to display.</td></tr>
         {% endif %}
     </table>
-    <input type="submit">
+    {% if tas and lectures %}
+        <input type="submit">
+    {% endif %}
 </form> <br><br>
 
 {% if message %}

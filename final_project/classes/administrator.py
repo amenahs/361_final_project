@@ -62,6 +62,7 @@ class Admin(Assign, Accounts):
             raise TypeError("Invalid input")
         try:
             lec = Lecture.objects.get(lectureID=lecID)
+            # lec = Lecture.objects.get(profID__email=profEmail)
             prof = Professor.objects.get(email=profEmail)
 
             if lec.profID != prof:
