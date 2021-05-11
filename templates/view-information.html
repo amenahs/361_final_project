@@ -127,7 +127,7 @@
                 </div>
             </div>
             <div class="col-md-2">
-                <input type="submit" class="profile-edit-btn" href="/view-information/" name="btnAddMore" value="Save Profile"/>
+                <input type="submit" class="profile-edit-btn" href="/edit-information/" name="btnAddMore" value="Edit Profile"/>
             </div>
         </div>
         <div class="row">
@@ -147,19 +147,15 @@
                                 <label>Name</label>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-floating">
-                                    <input type="text" name="name" class="form-control" id="floatingInput" placeholder="Name" required>
-                                </div>
+                                <p>{{ accountName }}</p>
                             </div>
                         </div>
-                        <div class="row">
+                       <div class="row">
                             <div class="col-md-6">
                                 <label>Password</label>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-floating">
-                                    <input type="text" name="password" class="form-control" id="floatingInput" placeholder="Password" required>
-                                </div>
+                                <p>{{ accountPassword }}</p>
                             </div>
                         </div>
                         <div class="row">
@@ -167,9 +163,7 @@
                                 <label>Address</label>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-floating">
-                                    <input type="text" name="address" class="form-control" id="floatingInput" placeholder="Address" required>
-                                </div>
+                                <p>{{ accountAddress }}</p>
                             </div>
                         </div>
 
@@ -178,9 +172,7 @@
                                 <label>Phone Number</label>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-floating">
-                                    <input type="text" name="number" class="form-control" id="floatingInput" placeholder="Phone Number" required>
-                                </div>
+                                <p>{{ accountPhoneNumber }}</p>
                             </div>
                         </div>
                         <div class="row">
@@ -201,8 +193,6 @@
     {% endif %}
     <br><a class="btn btn-dark" href="/dashboard/" role="button">Dashboard</a><br><br><br>
 </div>
-
-
 
 <br><br>
 

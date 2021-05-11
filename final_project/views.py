@@ -175,10 +175,21 @@ class EditInformation(View):
         u = User.objects.get(email=request.session["email"])
         isTA = False
 
+        accountProfession = ""
+        if u.type == AccountType.TA:
+            accountProfession = "TA"
+
+        if u.type == AccountType.Professor:
+            accountProfession = "Professor"
+
+        if u.type == AccountType.Administrator:
+            accountProfession = "Administrator"
+
         if u.type == AccountType.TA:
             isTA = True
             ta = TA.objects.get(email=u.email)
             return render(request, "edit-information.html", {"accountName": u.name, "accountEmail": u.email,
+                                                             "accountProfession": accountProfession,
                                                              "accountPassword": u.password,
                                                              "accountPhoneNumber": u.phoneNumber,
                                                              "accountAddress": u.homeAddress,
@@ -186,6 +197,7 @@ class EditInformation(View):
                                                              "TA": isTA})
 
         return render(request, "edit-information.html", {"accountName": u.name, "accountEmail": u.email,
+                                                         "accountProfession": accountProfession,
                                                          "accountPassword": u.password,
                                                          "accountPhoneNumber": u.phoneNumber,
                                                          "accountAddress": u.homeAddress,
@@ -238,6 +250,89 @@ class EditInformation(View):
                                                              "TA": isTA})
         except ValueError:
             return render(request, "edit-information.html", {"accountName": u.name,
+                                                             "accountEmail": u.email,
+                                                             "accountPassword": u.password,
+                                                             "accountPhoneNumber": u.phoneNumber,
+                                                             "accountAddress": u.homeAddress,
+                                                             "message": "Invalid email",
+                                                             "TA": isTA})
+
+class ViewInformation(View):
+    def get(self, request):
+        if not request.session.get("email"):
+            return redirect("/")
+        u = User.objects.get(email=request.session["email"])
+        isTA = False
+
+        accountProfession = ""
+        if u.type == AccountType.TA:
+            accountProfession = "TA"
+
+        if u.type == AccountType.Professor:
+            accountProfession = "Professor"
+
+        if u.type == AccountType.Administrator:
+            accountProfession = "Administrator"
+
+        if u.type == AccountType.TA:
+            isTA = True
+            ta = TA.objects.get(email=u.email)
+            return render(request, "view-information.html", {"accountName": u.name, "accountEmail": u.email,
+                                                             "accountProfession": accountProfession,
+                                                             "accountPassword": u.password,
+                                                             "accountPhoneNumber": u.phoneNumber,
+                                                             "accountAddress": u.homeAddress,
+                                                             "accountSkills": ta.skills,
+                                                             "TA": isTA})
+
+        return render(request, "view-information.html", {"accountName": u.name, "accountEmail": u.email,
+                                                         "accountProfession": accountProfession,
+                                                         "accountPassword": u.password,
+                                                         "accountPhoneNumber": u.phoneNumber,
+                                                         "accountAddress": u.homeAddress,
+                                                         "TA": isTA})
+
+    def post(self, request):
+
+        u = User.objects.get(email=request.session["email"])
+
+        isTA = False
+        taSkills = ''
+        if u.type == AccountType.TA:
+            isTA = True
+            taSkills = request.POST['skills']
+        try:
+            account = UserAccount()
+            message = 'No changes made'
+            if isTA:
+                ta = TA.objects.get(email=u.email)
+                return render(request, "view-information.html", {"accountName": u.name,
+                                                                 "accountEmail": u.email,
+                                                                 "accountPassword": u.password,
+                                                                 "accountPhoneNumber": u.phoneNumber,
+                                                                 "accountAddress": u.homeAddress,
+                                                                 "accountSkills": ta.skills,
+                                                                 "message": message,
+                                                                 "TA": isTA})
+
+            return render(request, "view-information.html", {"accountName": u.name,
+                                                             "accountEmail": u.email,
+                                                             "accountPassword": u.password,
+                                                             "accountPhoneNumber": u.phoneNumber,
+                                                             "accountAddress": u.homeAddress,
+                                                             "message": message,
+                                                             "TA": isTA})
+
+        except TypeError:
+            return render(request, "view-information.html", {"accountName": u.name,
+                                                             "accountEmail": u.email,
+                                                             "accountPassword": u.password,
+                                                             "accountPhoneNumber": u.phoneNumber,
+                                                             "accountAddress": u.homeAddress,
+                                                             "message": "Invalid input",
+                                                             "TA": isTA})
+        except ValueError:
+            return render(request, "view-information.html", {"accountName": u.name,
                                                              "accountEmail": u.email,
                                                              "accountPassword": u.password,
                                                              "accountPhoneNumber": u.phoneNumber,
@@ -488,3 +583,8 @@ class AssignTASection(View):
 
         # TODO implement actual logic
         return redirect("/assign-ta-section/")
+
+
+class ForgotPassword(View):
+    def get(self, request):
+        return render(request,"forgot-password.html", {})
