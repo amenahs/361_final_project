@@ -215,7 +215,7 @@ class EditInformation(View):
         if u.type == AccountType.TA:
             isTA = True
             taSkills = request.POST['skills']
-fixe
+
         accountProfession = ""
         if u.type == AccountType.TA:
             accountProfession = "TA"
