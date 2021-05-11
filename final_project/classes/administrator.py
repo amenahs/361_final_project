@@ -1,6 +1,6 @@
 from final_project.classes.accounts import Accounts
 from final_project.classes.assign import Assign
-from final_project.models import User, Administrator, Professor, TA, Course, Lecture, Section, AccountType
+from final_project.models import User, Administrator, Professor, TA, Course, Lecture, Section, AccountType, TASectionAllocation
 from random import randint
 
 
@@ -82,7 +82,7 @@ class Admin(Assign, Accounts):
             ta = TA.objects.get(email=taEmail)
 
             if lec.taID != ta:
-                lec.taID = ta
+                lec.taID.add(ta)
                 lec.save()
                 return True
 
@@ -90,6 +90,45 @@ class Admin(Assign, Accounts):
 
         except:
             raise ValueError("TA or lecture does not exist")
+
+    def __allocateSections__(self, taEmail, lecID, sectionNum):
+        if not taEmail or not lecID:
+            raise TypeError("Invalid input")
+
+        invalidNumAllocations = False
+        try:
+            lec = Lecture.objects.get(lectureID=lecID)
+            course = lec.course
+            ta = TA.objects.get(email=taEmail)
+
+            allLecAllocations = TASectionAllocation.objects.filter(lec=lec)
+            totalSectionAllocations = 0
+            for a in allLecAllocations:
+                if a.ta == ta:
+                    totalSectionAllocations -= a.numSections # number of allocations will change
+                else:
+                    totalSectionAllocations += a.numSections
+
+            totalSectionAllocations += sectionNum
+
+            if sectionNum > course.numSections or totalSectionAllocations > course.numSections:
+                invalidNumAllocations = True
+
+            else:
+                if TASectionAllocation.objects.filter(ta=ta, lec=lec).exists():
+                    a = TASectionAllocation.objects.get(ta=ta, lec=lec)
+                    a.numSections = sectionNum
+                    a.save()
+                else:
+                    allocation = TASectionAllocation.objects.create(ta=ta, lec=lec, numSections=sectionNum)
+                    allocation.save()
+                return True
+
+        except:
+            raise ValueError("TA or lecture does not exist")
+
+        if invalidNumAllocations:
+            raise SyntaxError("Number of sections allocated cannot be greater than number of sections in course")
 
     def __assignTASection__(self, taEmail, secID):
         pass

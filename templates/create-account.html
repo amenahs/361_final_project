@@ -27,12 +27,11 @@
 
 
         <div class="form-floating">
-            <label for="Type">Type of account</label>
-            <select class="type" placeholder="Type">
-                <option value=""></option>
-                <option value="Administrator">Administrator</option>
-                <option value="Professor">Professor</option>
-                <option value="Teaching Assistant (TA)">Teaching Assistant (TA)</option>
+            <p for="Type">Type of account</p>
+            <select class="type" name="type" placeholder="Type" required>
+                <option value="A">Administrator</option>
+                <option value="P">Professor</option>
+                <option value="T">Teaching Assistant (TA)</option>
             </select>
         </div><br>
 
@@ -40,10 +39,9 @@
         <button type="submit" class="btn btn-primary" value="Submit">Submit</button>
         <a class="btn btn-dark" href="/dashboard/" role="button">Dashboard</a><br><br><br>
     </form>
-</form>
-{% endblock  %}
+{% endblock %}
 
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -151,3 +149,4 @@
     </form>
 </body>
 </html>
+-->

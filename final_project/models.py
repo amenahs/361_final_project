@@ -4,9 +4,9 @@ from django.db import models
 
 
 class AccountType(models.TextChoices):
-    Administrator='A'
-    Professor='P'
-    TA='T'
+    Administrator = 'A'
+    Professor = 'P'
+    TA = 'T'
 
 
 class User(models.Model):
@@ -25,19 +25,15 @@ class Course(models.Model):
     numSections = models.IntegerField()
 
 
-class Instructor(User):
-    pass
-
-
 class Administrator(User):
     title = models.CharField(max_length=40)
 
 
-class Professor(Instructor):
+class Professor(User):
     pass
 
 
-class TA(Instructor):
+class TA(User):
     skills = models.CharField(max_length=75)
 
 
@@ -45,10 +41,18 @@ class Lecture(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     lectureID = models.IntegerField()
     profID = models.ForeignKey(Professor, on_delete=models.CASCADE, null=True)
-    taID = models.ForeignKey(TA, on_delete=models.CASCADE, null=True)
+    taID = models.ManyToManyField(TA)
 
 
 class Section(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     sectionID = models.IntegerField()
     taID = models.ForeignKey(TA, on_delete=models.CASCADE, null=True)
+
+
+class TASectionAllocation(models.Model):
+    ta = models.ForeignKey(TA, on_delete=models.CASCADE)
+    lec = models.ForeignKey(Lecture, on_delete=models.CASCADE)
+    numSections = models.IntegerField(default=0)
+
+
