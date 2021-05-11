@@ -132,4 +132,32 @@ class Admin(Assign, Accounts):
             raise SyntaxError("Number of sections allocated cannot be greater than number of sections in course")
 
     def __assignTASection__(self, taEmail, secID):
-        pass
+        if not taEmail or not secID:
+            raise TypeError("Invalid input")
+
+        invalidNumAllocations = False
+        try:
+            sec = Section.objects.get(sectionID=secID)
+            course = sec.course
+            ta = TA.objects.get(email=taEmail)
+
+            assignedLectures = Lecture.objects.filter(course=course, taID=ta)
+            allowedAllocations = 0
+            taAllocatedSections = TASectionAllocation.objects.filter(ta=ta, lec__in=assignedLectures)
+            for al in taAllocatedSections:
+                allowedAllocations += al.numSections
+            numAllocations = len(Section.objects.filter(taID=ta, course=course))
+
+            if numAllocations >= allowedAllocations:
+                invalidNumAllocations = True
+
+            if not invalidNumAllocations and sec.taID != ta:
+                sec.taID = ta
+                sec.save()
+                return True
+
+        except:
+            raise ValueError("TA or section does not exist")
+
+        if invalidNumAllocations:
+            raise SyntaxError("TA has already been allocated the maximum number of sections")
