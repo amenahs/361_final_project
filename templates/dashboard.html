@@ -25,7 +25,6 @@
                             Accounts
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="/view-account/">View</a></li>
                             <li><a class="dropdown-item" href="/edit-account/">Edit</a></li>
                             <li><a class="dropdown-item" href="/create-account/">Create</a></li>
                         </ul>
@@ -35,7 +34,8 @@
                             Courses
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="/view-course/">View</a></li>
+                            <li><a class="dropdown-item" href="/assign-prof-course/">Assign Professor</a></li>
+                            <li><a class="dropdown-item" href="/assign-ta-course/">Assign TA</a></li>
                             <li><a class="dropdown-item" href="/edit-course/">Edit</a></li>
                             <li><a class="dropdown-item" href="/create-course/">Create</a></li>
                         </ul>
@@ -52,7 +52,9 @@
         </div>
     </nav>
 
-    <p class="fs-1">Welcome, !</p><br>
+    <p class="fs-1">Welcome, {{ username }}!</p><br>
+
+
 
     <style>
         #signout {

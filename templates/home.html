@@ -14,7 +14,7 @@
     </div>
     <form action="/" method="post">
     {% csrf_token %}
-        <br><br>
+        <br>
     <img src="https://upload.wikimedia.org/wikipedia/en/thumb/a/a9/University_of_Wisconsin%E2%80%93Milwaukee_seal.svg/1200px-University_of_Wisconsin%E2%80%93Milwaukee_seal.svg.png"
          class="rounded mx-auto d-block" alt="UWM Logo" alt width="200" height="200">
     <h1>TA Scheduler</h1>
@@ -28,7 +28,8 @@
             <label for="floatingPassword">Password</label>
         </div>
         <br>
-        <button type="submit" class="btn btn-primary btn-lg" value="Login">Login</button>
+        <button type="submit" class="btn btn-warning btn-lg" value="Login">Login</button><br>
+        <a class="btn btn-light btn-sm" href="/forgot-password/" role="button">Forgot Password?</a>
     </form> <br><br>
 {% if message %}
     {{ message }}

@@ -32,8 +32,9 @@ class Dashboard(View):
         if not request.session.get("email"):
             return redirect("/")
         u = User.objects.get(email=request.session["email"])
+        username = u.name
         isAdmin = u.type == AccountType.Administrator
-        return render(request, "dashboard.html", {'isAdmin': isAdmin})
+        return render(request, "dashboard.html", {'isAdmin': isAdmin, 'username': username})
 
 
 class Error(View):
