@@ -1,44 +1,123 @@
 {% extends "base.html" %}
 
 {%  block content %}
-<form action="/create-account/" method="post">
-    {% csrf_token %}
-<br><h1>Create Account</h1><br>
+    <style>
+        .navbar {
+            width: 100%
+
+        }
+    </style>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Scheduler</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item navbar-light">
+                        <a class="nav-link active" aria-current="page" href="/dashboard/">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Accounts
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/edit-account/">Edit</a></li>
+                            <li><a class="dropdown-item" href="/create-account/">Create</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Courses
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/assign-prof-course/">Assign Professor</a></li>
+                            <li><a class="dropdown-item" href="/assign-ta-course/">Assign TA</a></li>
+                            <li><a class="dropdown-item" href="/create-course/">Create</a></li>
+                        </ul>
+                    <li class="nav-item navbar-light">
+                        <a class="nav-link active" aria-current="page" href="/edit-information/">Profile</a>
+                    </li>
+                    </li>
+                </ul>
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+    <form action="/create-account/" method="post">
+        {% csrf_token %}
+        <br><h1>Create Account</h1>
         <div class="form-floating">
             <input type="text" name="name" class="form-control" id="floatingInput" placeholder="First Last" required>
             <label for="floatingInput">Name</label>
-        </div><br>
+        </div>
         <div class="form-floating">
             <input type="email" name="email" class="form-control" id="floatingInput" placeholder="name@example.com" required>
-            <label for="floatingInput">Email address</label>
-        </div><br>
+            <label for="floatingInput">Email Address</label>
+        </div>
         <div class="form-floating">
             <input type="password" class="form-control" name="password" id="floatingPassword" placeholder="Password" required>
             <label for="floatingPassword">Password</label>
-        </div><br>
+        </div>
         <div class="form-floating">
             <input type="text" maxlength="10" name="number" pattern="\d{10}" class="form-control" id="floatingInput" placeholder="1234567890" required>
             <label for="floatingInput">Phone Number</label>
-        </div><br>
+        </div>
         <div class="form-floating">
             <input type="text" name="address" class="form-control" id="floatingInput" placeholder="1234 Rainbow Road, Milwaukee, WI 53202" required>
             <label for="floatingInput">Address</label>
-        </div><br>
+        </div>
 
 
         <div class="form-floating">
-            <p for="Type">Type of account</p>
-            <select class="type" name="type" placeholder="Type" required>
+            <select class="form-select" id="floatingSelectGrid" name="type" placeholder="Type" aria-label="Floating label select example" required>
+                <option selected>Select Type</option>
                 <option value="A">Administrator</option>
                 <option value="P">Professor</option>
                 <option value="T">Teaching Assistant (TA)</option>
             </select>
+            <label for="floatingSelectGrid">Type of Account</label>
         </div><br>
 
 
         <button type="submit" class="btn btn-primary" value="Submit">Submit</button>
-        <a class="btn btn-dark" href="/dashboard/" role="button">Dashboard</a><br><br><br>
     </form>
+    <style>
+        #signout {
+            position: fixed;
+            right: 5%;
+            bottom: 10%;
+        }
+    </style>
+    <div class="form-group" style="margin-top: 12%; float:right; position: relative; ">
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="signout">Sign Out</button>
+        </div>
+    </div>
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Signing Out</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to sign out?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Go Back</button>
+                    <form action="/" method="get">
+                        <button type="submit" class="btn btn-warning">Sign Out</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 <!-- <!DOCTYPE html>
