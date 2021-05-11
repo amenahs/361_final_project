@@ -215,16 +215,30 @@ class EditInformation(View):
         if u.type == AccountType.TA:
             isTA = True
             taSkills = request.POST['skills']
+fixe
+        accountProfession = ""
+        if u.type == AccountType.TA:
+            accountProfession = "TA"
+
+        if u.type == AccountType.Professor:
+            accountProfession = "Professor"
+
+        if u.type == AccountType.Administrator:
+            accountProfession = "Administrator"
+
         try:
             account = UserAccount()
             changesMade = account.__editContactInfo__(u.email, name, password, phoneNum, address, taSkills)
             message = 'No changes made'
             if changesMade:
                 message = 'Information updated'
+                u = User.objects.get(email=request.session["email"])
+
             if isTA:
                 ta = TA.objects.get(email=u.email)
-                return render(request, "edit-information.html", {"accountName": u.name,
+                return render(request, "view-information.html", {"accountName": u.name,
                                                                  "accountEmail": u.email,
+                                                                 "accountProfession": accountProfession,
                                                                  "accountPassword": u.password,
                                                                  "accountPhoneNumber": u.phoneNumber,
                                                                  "accountAddress": u.homeAddress,
@@ -232,8 +246,9 @@ class EditInformation(View):
                                                                  "message": message,
                                                                  "TA": isTA})
 
-            return render(request, "edit-information.html", {"accountName": u.name,
+            return render(request, "view-information.html", {"accountName": u.name,
                                                              "accountEmail": u.email,
+                                                             "accountProfession": accountProfession,
                                                              "accountPassword": u.password,
                                                              "accountPhoneNumber": u.phoneNumber,
                                                              "accountAddress": u.homeAddress,
@@ -243,6 +258,7 @@ class EditInformation(View):
         except TypeError:
             return render(request, "edit-information.html", {"accountName": u.name,
                                                              "accountEmail": u.email,
+                                                             "accountProfession": accountProfession,
                                                              "accountPassword": u.password,
                                                              "accountPhoneNumber": u.phoneNumber,
                                                              "accountAddress": u.homeAddress,
@@ -251,6 +267,7 @@ class EditInformation(View):
         except ValueError:
             return render(request, "edit-information.html", {"accountName": u.name,
                                                              "accountEmail": u.email,
+                                                             "accountProfession": accountProfession,
                                                              "accountPassword": u.password,
                                                              "accountPhoneNumber": u.phoneNumber,
                                                              "accountAddress": u.homeAddress,
@@ -301,6 +318,17 @@ class ViewInformation(View):
         if u.type == AccountType.TA:
             isTA = True
             taSkills = request.POST['skills']
+
+        accountProfession = ""
+        if u.type == AccountType.TA:
+            accountProfession = "TA"
+
+        if u.type == AccountType.Professor:
+            accountProfession = "Professor"
+
+        if u.type == AccountType.Administrator:
+            accountProfession = "Administrator"
+
         try:
             account = UserAccount()
             message = 'No changes made'
@@ -308,6 +336,7 @@ class ViewInformation(View):
                 ta = TA.objects.get(email=u.email)
                 return render(request, "view-information.html", {"accountName": u.name,
                                                                  "accountEmail": u.email,
+                                                                 "accountProfession": accountProfession,
                                                                  "accountPassword": u.password,
                                                                  "accountPhoneNumber": u.phoneNumber,
                                                                  "accountAddress": u.homeAddress,
@@ -317,6 +346,7 @@ class ViewInformation(View):
 
             return render(request, "view-information.html", {"accountName": u.name,
                                                              "accountEmail": u.email,
+                                                             "accountProfession": accountProfession,
                                                              "accountPassword": u.password,
                                                              "accountPhoneNumber": u.phoneNumber,
                                                              "accountAddress": u.homeAddress,
@@ -326,6 +356,7 @@ class ViewInformation(View):
         except TypeError:
             return render(request, "view-information.html", {"accountName": u.name,
                                                              "accountEmail": u.email,
+                                                             "accountProfession": accountProfession,
                                                              "accountPassword": u.password,
                                                              "accountPhoneNumber": u.phoneNumber,
                                                              "accountAddress": u.homeAddress,
@@ -334,6 +365,7 @@ class ViewInformation(View):
         except ValueError:
             return render(request, "view-information.html", {"accountName": u.name,
                                                              "accountEmail": u.email,
+                                                             "accountProfession": accountProfession,
                                                              "accountPassword": u.password,
                                                              "accountPhoneNumber": u.phoneNumber,
                                                              "accountAddress": u.homeAddress,

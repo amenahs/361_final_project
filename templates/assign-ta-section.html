@@ -28,7 +28,9 @@
             <tr><td>There are no sections to display.</td></tr>
         {% endif %}
     </table>
-    <input type="submit">
+    {% if tas and sections %}
+        <input type="submit">
+    {% endif %}
 </form> <br><br>
 
 {% if message %}
