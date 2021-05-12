@@ -317,6 +317,7 @@ class ViewInformation(View):
         taSkills = ''
         if u.type == AccountType.TA:
             isTA = True
+            # taSkills = request.POST['skills']
 
         accountProfession = ""
         if u.type == AccountType.TA:
