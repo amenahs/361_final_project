@@ -438,7 +438,7 @@ class AssignProfCourse(View):
         except ValueError:
             return render(request, "assign-prof-course.html", {"lectures": formattedLectures, "profs": formattedProf,
                                                                "assignedLectures": assignedLectures,
-                                                               "message": "Professor or lecture does not exist"})
+                                                               "message": "Please select valid professor and lecture"})
 
 
 class AssignTACourse(View):
@@ -526,7 +526,7 @@ class AssignTACourse(View):
         except ValueError:
             return render(request, "assign-ta-course.html", {"lectures": formattedLectures, "tas": formattedTA,
                                                              "assignedLectures": assignedLectures,
-                                                             "message": "TA or lecture does not exist"})
+                                                             "message": "Please select valid TA and lecture"})
 
 
 class AllocateSections(View):
@@ -559,7 +559,7 @@ class AllocateSections(View):
             return render(request, "allocate-sections.html", {'isAllocation': False,
                                                               'message': message})
         except ValueError:
-            message = "TA or lecture does not exist"
+            message = "TA lecture assignment does not exist"
             return render(request, "allocate-sections.html", {'isAllocation': False,
                                                               'message': message})
         except SyntaxError:
@@ -641,9 +641,9 @@ class AssignTASection(View):
         except TypeError:
             message = "Invalid input"
         except ValueError:
-           message = "TA or section does not exist"
+           message = "Please select valid TA and section"
         except SyntaxError:
-            message = TA.objects.get(email=taEmail).name + " has already been assigned the maximum number of allocated sections"
+            message = "TA has not been assigned to that course, or has already been assigned the maximum number of allocated sections"
 
         return render(request, "assign-ta-section.html", {"sections": formattedSections, "tas": formattedTA,
                                                          "assignedSections": assignedSections,

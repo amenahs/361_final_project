@@ -98,9 +98,9 @@ class Admin(Assign, Accounts):
 
         invalidNumAllocations = False
         try:
-            lec = Lecture.objects.get(lectureID=lecID)
-            course = lec.course
             ta = TA.objects.get(email=taEmail)
+            lec = Lecture.objects.get(lectureID=lecID, taID=ta)
+            course = lec.course
 
             allLecAllocations = TASectionAllocation.objects.filter(lec=lec)
             totalSectionAllocations = 0
@@ -126,7 +126,7 @@ class Admin(Assign, Accounts):
                 return True
 
         except:
-            raise ValueError("TA or lecture does not exist")
+            raise ValueError("TA course assignment does not exist")
 
         if invalidNumAllocations:
             raise SyntaxError("Number of sections allocated cannot be greater than number of sections in course")
@@ -160,4 +160,4 @@ class Admin(Assign, Accounts):
             raise ValueError("TA or section does not exist")
 
         if invalidNumAllocations:
-            raise SyntaxError("TA has already been allocated the maximum number of sections")
+            raise SyntaxError("TA has not been assigned to the course, or TA has already been allocated the maximum number of sections")

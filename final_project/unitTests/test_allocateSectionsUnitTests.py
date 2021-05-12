@@ -18,9 +18,11 @@ class AllocateSectionsUnitTests(TestCase):
                                     phoneNumber=123456789, homeAddress="Milwaukee, WI")
         self.anotherTA = TA.objects.create(name="another ta", email="taAnotherTest@uwm.edu", password="456", type=AccountType.TA,
                                     phoneNumber=123456789, homeAddress="Milwaukee, WI")
-        self.course = Course.objects.create(courseID='361', name='Introduction to Software Engineering', numLectures=1,
+        self.course = Course.objects.create(courseID=361, name='Introduction to Software Engineering', numLectures=1,
                                             numSections=3)
-        self.lecture = Lecture.objects.create(lectureID='123', course=self.course)
+        self.unassignedCourse = Course.objects.create(courseID=110, name="Learn Coding", numLectures=1, numSections=1)
+        self.lecture = Lecture.objects.create(lectureID=123, course=self.course)
+        self.unassignedlLecture = Lecture.objects.create(lectureID=100, course=self.unassignedCourse)
         self.lecture.taID.add(self.ta)
         self.lecture.taID.add(self.anotherTA)
 
@@ -60,6 +62,10 @@ class AllocateSectionsUnitTests(TestCase):
     def test_allocateSections_validEntry_bothTAs(self):
         self.admin.__allocateSections__(self.ta.email, self.lecture.lectureID, 1)
         self.assertTrue(self.admin.__allocateSections__(self.anotherTA.email, self.lecture.lectureID, 2))
+
+    def test_allocateSections_unassignedCourse(self):
+        with self.assertRaises(ValueError, msg="Admin allocating sections with unassigned lecture did not raise ValueError"):
+            a = self.admin.__allocateSections__(self.ta.email, self.unassignedlLecture.lectureID, 1)
 
     def test_allocateSections_invalidEntry_bothTAs(self):
         with self.assertRaises(SyntaxError, msg="Admin allocating sections with invalid number of sections did not raise SyntaxError"):
