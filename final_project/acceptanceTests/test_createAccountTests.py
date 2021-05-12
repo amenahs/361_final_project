@@ -6,7 +6,7 @@ from final_project.models import User
 class CreateAccountTestClass(TestCase):
     def setUp(self):
         self.client = Client()
-        self.account = User.objects.create(name="name",email="username@uwm.edu", password="123", type="P", phoneNumber=1234567, homeAddress="Milwaukee, WI")
+        self.account = User.objects.create(name="name", email="username@uwm.edu", password="123", type="P", phoneNumber=1234567, homeAddress="Milwaukee, WI")
 
     def testNoUserName(self):
         resp = self.client.post("/create-account/", {'name': 'user', 'email': '', 'password': '1234', 'number': 1234567, 'address': 'Milwaukee,WI', 'type': 'P'})

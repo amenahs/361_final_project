@@ -214,7 +214,7 @@ class EditInformation(View):
         taSkills = ''
         if u.type == AccountType.TA:
             isTA = True
-            taSkills = request.POST['skills']
+           # taSkills = request.POST['skills']
 
         accountProfession = ""
         if u.type == AccountType.TA:
@@ -317,7 +317,7 @@ class ViewInformation(View):
         taSkills = ''
         if u.type == AccountType.TA:
             isTA = True
-            taSkills = request.POST['skills']
+            # taSkills = request.POST['skills']
 
         accountProfession = ""
         if u.type == AccountType.TA:
@@ -439,7 +439,7 @@ class AssignProfCourse(View):
         except ValueError:
             return render(request, "assign-prof-course.html", {"lectures": formattedLectures, "profs": formattedProf,
                                                                "assignedLectures": assignedLectures,
-                                                               "message": "Professor or lecture does not exist"})
+                                                               "message": "Please select valid professor and lecture"})
 
 
 class AssignTACourse(View):
@@ -527,7 +527,7 @@ class AssignTACourse(View):
         except ValueError:
             return render(request, "assign-ta-course.html", {"lectures": formattedLectures, "tas": formattedTA,
                                                              "assignedLectures": assignedLectures,
-                                                             "message": "TA or lecture does not exist"})
+                                                             "message": "Please select valid TA and lecture"})
 
 
 class AllocateSections(View):
@@ -560,7 +560,7 @@ class AllocateSections(View):
             return render(request, "allocate-sections.html", {'isAllocation': False,
                                                               'message': message})
         except ValueError:
-            message = "TA or lecture does not exist"
+            message = "TA lecture assignment does not exist"
             return render(request, "allocate-sections.html", {'isAllocation': False,
                                                               'message': message})
         except SyntaxError:
@@ -586,8 +586,8 @@ class AssignTASection(View):
             return redirect("/")
 
         u = User.objects.get(email=request.session["email"])
-        isAdmin = u.type == AccountType.Administrator
-        if not isAdmin:
+        isAdminOrProf = u.type == AccountType.Administrator or u.type == AccountType.Professor
+        if not isAdminOrProf:
             return redirect("/error-page/")
 
         sections = Section.objects.all()
@@ -604,7 +604,7 @@ class AssignTASection(View):
         for t in tas:
             secList = Section.objects.filter(taID=t)
             for s in secList:
-                assignedSections.append((t.name, s.lectureID, s.course.courseID, s.course.name))
+                assignedSections.append((t.name, s.sectionID, s.course.courseID, s.course.name))
 
         return render(request, "assign-ta-section.html", {"sections": formattedSections, "tas": formattedTA,
                                                           "assignedSections": assignedSections})
@@ -612,11 +612,45 @@ class AssignTASection(View):
     def post(self, request):
         taEmail = request.POST['ta']
         secID = request.POST['section']
+        message = ''
 
-        # TODO implement actual logic
-        return redirect("/assign-ta-section/")
+        sections = Section.objects.all()
+        formattedSections = []
+        for s in sections:
+            formattedSections.append((s.sectionID, s.course.courseID, s.course.name))
+
+        tas = TA.objects.all()
+        formattedTA = []
+        for t in tas:
+            formattedTA.append((t.email, t.name, t.skills))
+
+        assignedSections = []
+        for t in tas:
+            secList = Section.objects.filter(taID=t)
+            for s in secList:
+                assignedSections.append((t.name, s.sectionID, s.course.courseID, s.course.name))
+
+        try:
+            a = Admin()
+            updatedAssignment = a.__assignTASection__(taEmail, secID)
+
+            if updatedAssignment:
+                return redirect("/assign-ta-section/")
+            else:
+                message = "Assignment already exists"
+
+        except TypeError:
+            message = "Invalid input"
+        except ValueError:
+           message = "Please select valid TA and section"
+        except SyntaxError:
+            message = "TA has not been assigned to that course, or has already been assigned the maximum number of allocated sections"
+
+        return render(request, "assign-ta-section.html", {"sections": formattedSections, "tas": formattedTA,
+                                                         "assignedSections": assignedSections,
+                                                         "message": message})
 
 
 class ForgotPassword(View):
     def get(self, request):
-        return render(request,"forgot-password.html", {})
+        return render(request, "forgot-password.html", {})
