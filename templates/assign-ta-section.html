@@ -1,3 +1,128 @@
+{% extends "base.html" %}
+
+{%  block content %}
+    <style>
+        .navbar {
+            width: 100%
+
+        }
+    </style>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Scheduler</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item navbar-light">
+                        <a class="nav-link active" aria-current="page" href="/dashboard/">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Accounts
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/edit-account/">Edit</a></li>
+                            <li><a class="dropdown-item" href="/create-account/">Create</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Courses
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/assign-prof-course/">Assign Professor</a></li>
+                            <li><a class="dropdown-item" href="/assign-ta-course/">Assign TA</a></li>
+                            <li><a class="dropdown-item" href="/create-course/">Create</a></li>
+                        </ul>
+                    <li class="nav-item navbar-light">
+                        <a class="nav-link active" aria-current="page" href="/edit-information/">Profile</a>
+                    </li>
+                    </li>
+                </ul>
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+    <br><h1>Assign TA to Course</h1>
+    <form action="/assign-ta-section/" method="post">
+        {% csrf_token %}
+        <table>
+            {% if tas %}
+                <div class="form-floating">
+                    <select class="form-select" id="floatingSelectGrid" name="ta" placeholder="Type" aria-label="Floating label select example" required>
+                        <option selected>Select TA</option>
+                        {% for t in tas %}
+                            <option value="{{ t.0 }}">{{ t.1 }} ({{ t.0 }}), Skills: {{ t.2 }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="floatingSelectGrid">Select TA</label>
+                </div>
+            {%  else %}
+                <tr><td>There are no TAs to display.</td></tr>
+            {% endif %}
+            {% if sections %}
+                <div class="form-floating">
+                <select class="form-select" id="floatingSelectGrid" name="lecture" placeholder="Type" aria-label="Floating label select example" required>
+                    <option selected>Select Lecture</option>
+                    {% for s in sections %}
+                        <option value="{{ s.0 }}">{{ s.1 }} - {{ s.2 }}, Section {{ s.0 }}</option>
+                    {% endfor %}
+                </select>
+                <label for="floatingSelectGrid">Select Lecture</label>
+            {%  else %}
+                <tr><td>There are no sections to display.</td></tr>
+            {% endif %}
+            </div>
+        </table><br>
+        {% if tas and lectures %}
+            <button type="submit" class="btn btn-primary btn-lg" value="Submit">Submit</button>
+        {% endif %}
+    </form><br>
+    {% if message %}
+        {{ message }} <br><br>
+    {% endif %}
+
+    <br>
+    <style>
+        #signout {
+            position: fixed;
+            right: 5%;
+            bottom: 10%;
+        }
+    </style>
+    <div class="form-group" style="margin-top: 12%; float:right; position: relative; ">
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="signout">Sign Out</button>
+        </div>
+    </div>
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Signing Out</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to sign out?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Go Back</button>
+                    <form action="/" method="get">
+                        <button type="submit" class="btn btn-warning">Sign Out</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{%  endblock %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
