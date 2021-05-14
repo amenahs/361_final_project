@@ -49,7 +49,7 @@
             </div>
         </div>
     </nav>
-    <br><h1>Assign TA to Course</h1>
+    <br><h1>Assign TA to Section</h1>
     <form action="/assign-ta-section/" method="post">
         {% csrf_token %}
         <table>
@@ -68,8 +68,8 @@
             {% endif %}
             {% if sections %}
                 <div class="form-floating">
-                <select class="form-select" id="floatingSelectGrid" name="lecture" placeholder="Type" aria-label="Floating label select example" required>
-                    <option selected>Select Lecture</option>
+                <select class="form-select" id="floatingSelectGrid" name="section" placeholder="Type" aria-label="Floating label select example" required>
+                    <option selected>Select Section</option>
                     {% for s in sections %}
                         <option value="{{ s.0 }}">{{ s.1 }} - {{ s.2 }}, Section {{ s.0 }}</option>
                     {% endfor %}
@@ -80,7 +80,7 @@
             {% endif %}
             </div>
         </table><br>
-        {% if tas and lectures %}
+        {% if tas and sections %}
             <button type="submit" class="btn btn-primary btn-lg" value="Submit">Submit</button>
         {% endif %}
     </form><br>
