@@ -31,10 +31,54 @@ class Dashboard(View):
     def get(self, request):
         if not request.session.get("email"):
             return redirect("/")
+
         u = User.objects.get(email=request.session["email"])
         username = u.name
-        isAdmin = u.type == AccountType.Administrator
-        return render(request, "dashboard.html", {'isAdmin': isAdmin, 'username': username})
+        accountProfession = getProfession(u)
+        isNotAdmin = accountProfession!="Administrator"
+        courseHeader = "Assigned Courses"
+
+        if not isNotAdmin:
+            courses = Course.objects.all()
+            courseHeader = "Active Courses"
+        elif accountProfession=="Professor":
+            courses = Course.objects.filter(lecture__profID__email=u.email).distinct()
+        else:
+            courses = Course.objects.filter(lecture__taID__email=u.email).distinct()
+
+        formattedCourses = []
+        for c in courses:
+            formattedCourses.append((c.courseID, c.name, c.numLectures, c.numSections))
+
+        formattedAdmins = []
+        admins = Administrator.objects.all()
+        for a in admins:
+            formattedAdmins.append((a.name, "Administrator", a.email, a.phoneNumber))
+
+        admins = Professor.objects.all()
+        for p in admins:
+            formattedAdmins.append((p.name, "Professor", p.email, p.phoneNumber))
+
+        admins = TA.objects.all()
+        for t in admins:
+            formattedAdmins.append((t.name, "Teaching Assistant", t.email, t.phoneNumber))
+
+        taAssignments= []
+        if isNotAdmin:
+            tas = TA.objects.all()
+            for t in tas:
+                assignedCourses = Course.objects.filter(lecture__taID__email=t.email).distinct()
+                for c in assignedCourses:
+                    numAllocations = 0
+                    allocations = TASectionAllocation.objects.filter(ta=t, lec__course__courseID=c.courseID).distinct()
+                    for a in allocations:
+                        numAllocations += a.numSections
+                    taAssignments.append((t.name, c.courseID, c.name, numAllocations))
+
+        return render(request, "dashboard.html",
+                      {"courses": formattedCourses, "admins": formattedAdmins, 'username': username,
+                       'isNotAdmin': isNotAdmin, 'courseHeader': courseHeader,
+                       'taAssignments': taAssignments})
 
 
 class Error(View):
@@ -175,15 +219,7 @@ class EditInformation(View):
         u = User.objects.get(email=request.session["email"])
         isTA = False
 
-        accountProfession = ""
-        if u.type == AccountType.TA:
-            accountProfession = "TA"
-
-        if u.type == AccountType.Professor:
-            accountProfession = "Professor"
-
-        if u.type == AccountType.Administrator:
-            accountProfession = "Administrator"
+        accountProfession = getProfession(u)
 
         if u.type == AccountType.TA:
             isTA = True
@@ -196,12 +232,7 @@ class EditInformation(View):
                                                              "accountSkills": ta.skills,
                                                              "TA": isTA})
 
-        return render(request, "edit-information.html", {"accountName": u.name, "accountEmail": u.email,
-                                                         "accountProfession": accountProfession,
-                                                         "accountPassword": u.password,
-                                                         "accountPhoneNumber": u.phoneNumber,
-                                                         "accountAddress": u.homeAddress,
-                                                         "TA": isTA})
+        return returnnomessage(request, "edit-information.html", u, accountProfession, isTA)
 
     def post(self, request):
         name = request.POST['name']
@@ -214,17 +245,9 @@ class EditInformation(View):
         taSkills = ''
         if u.type == AccountType.TA:
             isTA = True
-           # taSkills = request.POST['skills']
+        # taSkills = request.POST['skills']
 
-        accountProfession = ""
-        if u.type == AccountType.TA:
-            accountProfession = "TA"
-
-        if u.type == AccountType.Professor:
-            accountProfession = "Professor"
-
-        if u.type == AccountType.Administrator:
-            accountProfession = "Administrator"
+        accountProfession = getProfession(u)
 
         try:
             account = UserAccount()
@@ -246,33 +269,16 @@ class EditInformation(View):
                                                                  "message": message,
                                                                  "TA": isTA})
 
-            return render(request, "view-information.html", {"accountName": u.name,
-                                                             "accountEmail": u.email,
-                                                             "accountProfession": accountProfession,
-                                                             "accountPassword": u.password,
-                                                             "accountPhoneNumber": u.phoneNumber,
-                                                             "accountAddress": u.homeAddress,
-                                                             "message": message,
-                                                             "TA": isTA})
+            return returnwmessage(request, "view-information.html", u, accountProfession, message, isTA)
 
         except TypeError:
-            return render(request, "edit-information.html", {"accountName": u.name,
-                                                             "accountEmail": u.email,
-                                                             "accountProfession": accountProfession,
-                                                             "accountPassword": u.password,
-                                                             "accountPhoneNumber": u.phoneNumber,
-                                                             "accountAddress": u.homeAddress,
-                                                             "message": "Invalid input",
-                                                             "TA": isTA})
+            message = "Invalid input"
+            return returnwmessage(request, "view-information.html", u, accountProfession, message, isTA)
+
         except ValueError:
-            return render(request, "edit-information.html", {"accountName": u.name,
-                                                             "accountEmail": u.email,
-                                                             "accountProfession": accountProfession,
-                                                             "accountPassword": u.password,
-                                                             "accountPhoneNumber": u.phoneNumber,
-                                                             "accountAddress": u.homeAddress,
-                                                             "message": "Invalid email",
-                                                             "TA": isTA})
+            message = "Invalid email"
+            return returnwmessage(request, "view-information.html", u, accountProfession, message, isTA)
+
 
 class ViewInformation(View):
     def get(self, request):
@@ -281,15 +287,7 @@ class ViewInformation(View):
         u = User.objects.get(email=request.session["email"])
         isTA = False
 
-        accountProfession = ""
-        if u.type == AccountType.TA:
-            accountProfession = "TA"
-
-        if u.type == AccountType.Professor:
-            accountProfession = "Professor"
-
-        if u.type == AccountType.Administrator:
-            accountProfession = "Administrator"
+        accountProfession = getProfession(u)
 
         if u.type == AccountType.TA:
             isTA = True
@@ -302,32 +300,17 @@ class ViewInformation(View):
                                                              "accountSkills": ta.skills,
                                                              "TA": isTA})
 
-        return render(request, "view-information.html", {"accountName": u.name, "accountEmail": u.email,
-                                                         "accountProfession": accountProfession,
-                                                         "accountPassword": u.password,
-                                                         "accountPhoneNumber": u.phoneNumber,
-                                                         "accountAddress": u.homeAddress,
-                                                         "TA": isTA})
+        return returnnomessage(request, "view-information.html", u, accountProfession, isTA)
 
     def post(self, request):
 
         u = User.objects.get(email=request.session["email"])
 
         isTA = False
-        taSkills = ''
         if u.type == AccountType.TA:
             isTA = True
-            # taSkills = request.POST['skills']
 
-        accountProfession = ""
-        if u.type == AccountType.TA:
-            accountProfession = "TA"
-
-        if u.type == AccountType.Professor:
-            accountProfession = "Professor"
-
-        if u.type == AccountType.Administrator:
-            accountProfession = "Administrator"
+        accountProfession = getProfession(u)
 
         try:
             account = UserAccount()
@@ -344,33 +327,14 @@ class ViewInformation(View):
                                                                  "message": message,
                                                                  "TA": isTA})
 
-            return render(request, "view-information.html", {"accountName": u.name,
-                                                             "accountEmail": u.email,
-                                                             "accountProfession": accountProfession,
-                                                             "accountPassword": u.password,
-                                                             "accountPhoneNumber": u.phoneNumber,
-                                                             "accountAddress": u.homeAddress,
-                                                             "message": message,
-                                                             "TA": isTA})
+            return returnwmessage(request, "view-information.html", u, accountProfession, message, isTA)
 
         except TypeError:
-            return render(request, "view-information.html", {"accountName": u.name,
-                                                             "accountEmail": u.email,
-                                                             "accountProfession": accountProfession,
-                                                             "accountPassword": u.password,
-                                                             "accountPhoneNumber": u.phoneNumber,
-                                                             "accountAddress": u.homeAddress,
-                                                             "message": "Invalid input",
-                                                             "TA": isTA})
+            message = "Invalid input"
+            return returnwmessage(request, "view-information.html", u, accountProfession, message, isTA)
         except ValueError:
-            return render(request, "view-information.html", {"accountName": u.name,
-                                                             "accountEmail": u.email,
-                                                             "accountProfession": accountProfession,
-                                                             "accountPassword": u.password,
-                                                             "accountPhoneNumber": u.phoneNumber,
-                                                             "accountAddress": u.homeAddress,
-                                                             "message": "Invalid email",
-                                                             "TA": isTA})
+            message = "Invalid email"
+            return returnwmessage(request, "view-information.html", u, accountProfession, message, isTA)
 
 
 class AssignProfCourse(View):
@@ -586,8 +550,8 @@ class AssignTASection(View):
             return redirect("/")
 
         u = User.objects.get(email=request.session["email"])
-        isAdminOrProf = u.type == AccountType.Administrator or u.type == AccountType.Professor
-        if not isAdminOrProf:
+        isAdmin = u.type == AccountType.Administrator
+        if not isAdmin:
             return redirect("/error-page/")
 
         sections = Section.objects.all()
@@ -612,8 +576,7 @@ class AssignTASection(View):
     def post(self, request):
         taEmail = request.POST['ta']
         secID = request.POST['section']
-        message = ''
-
+        
         sections = Section.objects.all()
         formattedSections = []
         for s in sections:
@@ -642,15 +605,43 @@ class AssignTASection(View):
         except TypeError:
             message = "Invalid input"
         except ValueError:
-           message = "Please select valid TA and section"
+            message = "Please select valid TA and section"
         except SyntaxError:
             message = "TA has not been assigned to that course, or has already been assigned the maximum number of allocated sections"
 
         return render(request, "assign-ta-section.html", {"sections": formattedSections, "tas": formattedTA,
-                                                         "assignedSections": assignedSections,
-                                                         "message": message})
+                                                          "assignedSections": assignedSections,
+                                                          "message": message})
 
 
 class ForgotPassword(View):
     def get(self, request):
         return render(request, "forgot-password.html", {})
+
+
+def returnwmessage(req, url, u, pro, msg, ta):
+    return render(req, url, {"accountName": u.name, "accountEmail": u.email,
+                             "accountProfession": pro,
+                             "accountPassword": u.password,
+                             "accountPhoneNumber": u.phoneNumber,
+                             "accountAddress": u.homeAddress,
+                             "message": msg,
+                             "TA": ta})
+
+def returnnomessage(req, url, u, pro, ta):
+    return render(req, url, {"accountName": u.name, "accountEmail": u.email,
+                             "accountProfession": pro,
+                             "accountPassword": u.password,
+                             "accountPhoneNumber": u.phoneNumber,
+                             "accountAddress": u.homeAddress,
+                             "TA": ta})
+
+def getProfession(u):
+    if u.type == AccountType.TA:
+        return "TA"
+
+    if u.type == AccountType.Professor:
+        return "Professor"
+
+    if u.type == AccountType.Administrator:
+        return "Administrator"

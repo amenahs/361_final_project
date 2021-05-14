@@ -4,6 +4,92 @@
 
     <p class="fs-1">Welcome, {{ username }}!</p><br>
 
+    <h3>{{ courseHeader }}</h3>
+    {% if courses %}
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Course ID</th>
+                <th scope="col">Course Name</th>
+                <th scope="col">Number of Lectures</th>
+                <th scope="col">Number of Labs</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for c in courses %}
+                <tr>
+                    <th scope="row"></th>
+                    <td>{{ c.0 }}</td>
+                    <td>{{ c.1 }}</td>
+                    <td>{{ c.2 }}</td>
+                    <td>{{ c.3 }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {%  else %}
+        <tr><td>There are no courses to display.</td></tr>
+    {%  endif %}
+    <br>
+    <h3>Active Accounts</h3>
+    {% if admins %}
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Name</th>
+                <th scope="col">Account Type</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone Number</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for c in admins %}
+                <tr>
+                    <th scope="row"></th>
+                    <td>{{ c.0 }}</td>
+                    <td>{{ c.1 }}</td>
+                    <td>{{ c.2 }}</td>
+                    <td>{{ c.3 }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {%  else %}
+        <tr><td>There are no accounts to display.</td></tr>
+    {%  endif %}
+    <br>
+    {% if isNotAdmin %}
+        <h3>TA Assignments</h3>
+        {% if taAssignments %}
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">TA Name</th>
+                    <th scope="col">Course ID</th>
+                    <th scope="col">Course Name</th>
+                    <th scope="col">Number of Allocated Sections</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for t in taAssignments %}
+                    <tr>
+                        <th scope="row"></th>
+                        <td>{{ t.0 }}</td>
+                        <td>{{ t.1 }}</td>
+                        <td>{{ t.2 }}</td>
+                        <td>{{ t.3 }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {%  else %}
+            <tr><td>There are no TA assignments to display.</td></tr>
+        {%  endif %}
+    {% endif %}
+
     <style>
         .footer {
             position: fixed;
@@ -21,7 +107,7 @@
         <span class="text-muted">University of Wisconsin Milwaukee Course Scheduler</span>
     </footer>
 
-{% endblock  %}
+{% endblock %}
 
 
 <h1>Dashboard</h1>
