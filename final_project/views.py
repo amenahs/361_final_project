@@ -28,29 +28,34 @@ class Home(View):
 
 
 class Dashboard(View):
-
     def get(self, request):
         if not request.session.get("email"):
             return redirect("/")
 
         u = User.objects.get(email=request.session["email"])
         username = u.name
-        isAdmin = u.type == AccountType.Administrator
-        if not isAdmin:
-            return redirect("/error-page/")
+        accountProfession = getProfession(u)
+        isNotAdmin = accountProfession!="Administrator"
+        courseHeader = "Assigned Courses"
 
-        courses = Course.objects.all()
+        if not isNotAdmin:
+            courses = Course.objects.all()
+            courseHeader = "Active Courses"
+        elif accountProfession=="Professor":
+            courses = Course.objects.filter(lecture__profID__email=u.email).distinct()
+        else:
+            courses = Course.objects.filter(lecture__taID__email=u.email).distinct()
+
         formattedCourses = []
         for c in courses:
             formattedCourses.append((c.courseID, c.name, c.numLectures, c.numSections))
 
-        admins = Administrator.objects.all()
         formattedAdmins = []
+        admins = Administrator.objects.all()
         for a in admins:
             formattedAdmins.append((a.name, "Administrator", a.email, a.phoneNumber))
 
         admins = Professor.objects.all()
-
         for p in admins:
             formattedAdmins.append((p.name, "Professor", p.email, p.phoneNumber))
 
@@ -58,8 +63,22 @@ class Dashboard(View):
         for t in admins:
             formattedAdmins.append((t.name, "Teaching Assistant", t.email, t.phoneNumber))
 
+        taAssignments= []
+        if isNotAdmin:
+            tas = TA.objects.all()
+            for t in tas:
+                assignedCourses = Course.objects.filter(lecture__taID__email=t.email).distinct()
+                for c in assignedCourses:
+                    numAllocations = 0
+                    allocations = TASectionAllocation.objects.filter(ta=t, lec__course__courseID=c.courseID).distinct()
+                    for a in allocations:
+                        numAllocations += a.numSections
+                    taAssignments.append((t.name, c.courseID, c.name, numAllocations))
+
         return render(request, "dashboard.html",
-                      {"courses": formattedCourses, "admins": formattedAdmins, 'username': username, 'isAdmin': isAdmin})
+                      {"courses": formattedCourses, "admins": formattedAdmins, 'username': username,
+                       'isNotAdmin': isNotAdmin, 'courseHeader': courseHeader,
+                       'taAssignments': taAssignments})
 
 
 class Error(View):
