@@ -149,7 +149,8 @@ class CreateAccount(View):
             return render(request, "create-account.html", {"admins": formattedAdmins, "prof": formattedProf,
                                                            "tas": formattedTA, "message": "Invalid input"})
         else:
-            return redirect("/create-account/")
+            return render(request, "create-account.html", {"admins": formattedAdmins, "prof": formattedProf,
+                                                           "tas": formattedTA, "message": "Account created successfully"})
 
 
 class CreateCourse(View):
@@ -209,7 +210,9 @@ class CreateCourse(View):
                           {"courses": formattedCourses, "lectures": formattedLectures, "sections": formattedSections,
                            "message": "Invalid input"})
         else:
-            return redirect("/create-course/")
+            return render(request, "create-course.html",
+                          {"courses": formattedCourses, "lectures": formattedLectures, "sections": formattedSections,
+                           "message": "Course created successfully"})
 
 
 class EditInformation(View):
@@ -217,67 +220,43 @@ class EditInformation(View):
         if not request.session.get("email"):
             return redirect("/")
         u = User.objects.get(email=request.session["email"])
-        isTA = False
-
         accountProfession = getProfession(u)
 
-        if u.type == AccountType.TA:
-            isTA = True
-            ta = TA.objects.get(email=u.email)
-            return render(request, "edit-information.html", {"accountName": u.name, "accountEmail": u.email,
-                                                             "accountProfession": accountProfession,
-                                                             "accountPassword": u.password,
-                                                             "accountPhoneNumber": u.phoneNumber,
-                                                             "accountAddress": u.homeAddress,
-                                                             "accountSkills": ta.skills,
-                                                             "TA": isTA})
+        message = ''
+        skillsList = u.skills.split(',')
 
-        return returnnomessage(request, "edit-information.html", u, accountProfession, isTA)
+        return returnnomessage(request, "edit-information.html", u, accountProfession, skillsList)
 
     def post(self, request):
         name = request.POST['name']
         password = request.POST['password']
         phoneNum = int(request.POST['number'])
         address = request.POST['address']
+        skills = request.POST['skills']
         u = User.objects.get(email=request.session["email"])
-
-        isTA = False
-        taSkills = ''
-        if u.type == AccountType.TA:
-            isTA = True
-        # taSkills = request.POST['skills']
 
         accountProfession = getProfession(u)
 
+        skillsList = u.skills.split(',')
+
         try:
             account = UserAccount()
-            changesMade = account.__editContactInfo__(u.email, name, password, phoneNum, address, taSkills)
+            changesMade = account.__editContactInfo__(u.email, name, password, phoneNum, address, skills)
             message = 'No changes made'
             if changesMade:
                 message = 'Information updated'
                 u = User.objects.get(email=request.session["email"])
+                skillsList = u.skills.split(',')
 
-            if isTA:
-                ta = TA.objects.get(email=u.email)
-                return render(request, "view-information.html", {"accountName": u.name,
-                                                                 "accountEmail": u.email,
-                                                                 "accountProfession": accountProfession,
-                                                                 "accountPassword": u.password,
-                                                                 "accountPhoneNumber": u.phoneNumber,
-                                                                 "accountAddress": u.homeAddress,
-                                                                 "accountSkills": ta.skills,
-                                                                 "message": message,
-                                                                 "TA": isTA})
-
-            return returnwmessage(request, "view-information.html", u, accountProfession, message, isTA)
+            return returnwmessage(request, "view-information.html", u, accountProfession, message, skillsList)
 
         except TypeError:
             message = "Invalid input"
-            return returnwmessage(request, "view-information.html", u, accountProfession, message, isTA)
+            return returnwmessage(request, "view-information.html", u, accountProfession, message, skillsList)
 
         except ValueError:
             message = "Invalid email"
-            return returnwmessage(request, "view-information.html", u, accountProfession, message, isTA)
+            return returnwmessage(request, "view-information.html", u, accountProfession, message, skillsList)
 
 
 class ViewInformation(View):
@@ -285,56 +264,30 @@ class ViewInformation(View):
         if not request.session.get("email"):
             return redirect("/")
         u = User.objects.get(email=request.session["email"])
-        isTA = False
-
         accountProfession = getProfession(u)
 
-        if u.type == AccountType.TA:
-            isTA = True
-            ta = TA.objects.get(email=u.email)
-            return render(request, "view-information.html", {"accountName": u.name, "accountEmail": u.email,
-                                                             "accountProfession": accountProfession,
-                                                             "accountPassword": u.password,
-                                                             "accountPhoneNumber": u.phoneNumber,
-                                                             "accountAddress": u.homeAddress,
-                                                             "accountSkills": ta.skills,
-                                                             "TA": isTA})
+        message = ''
+        skillsList = u.skills.split(',')
 
-        return returnnomessage(request, "view-information.html", u, accountProfession, isTA)
+        return returnwmessage(request, "view-information.html", u, accountProfession, message, skillsList)
 
     def post(self, request):
 
         u = User.objects.get(email=request.session["email"])
 
-        isTA = False
-        if u.type == AccountType.TA:
-            isTA = True
-
         accountProfession = getProfession(u)
+        skillsList = u.skills.split(',')
 
         try:
-            account = UserAccount()
             message = 'No changes made'
-            if isTA:
-                ta = TA.objects.get(email=u.email)
-                return render(request, "view-information.html", {"accountName": u.name,
-                                                                 "accountEmail": u.email,
-                                                                 "accountProfession": accountProfession,
-                                                                 "accountPassword": u.password,
-                                                                 "accountPhoneNumber": u.phoneNumber,
-                                                                 "accountAddress": u.homeAddress,
-                                                                 "accountSkills": ta.skills,
-                                                                 "message": message,
-                                                                 "TA": isTA})
-
-            return returnwmessage(request, "view-information.html", u, accountProfession, message, isTA)
+            return returnwmessage(request, "view-information.html", u, accountProfession, message, skillsList)
 
         except TypeError:
             message = "Invalid input"
-            return returnwmessage(request, "view-information.html", u, accountProfession, message, isTA)
+            return returnwmessage(request, "view-information.html", u, accountProfession, message, skillsList)
         except ValueError:
             message = "Invalid email"
-            return returnwmessage(request, "view-information.html", u, accountProfession, message, isTA)
+            return returnwmessage(request, "view-information.html", u, accountProfession, message, skillsList)
 
 
 class AssignProfCourse(View):
@@ -626,23 +579,23 @@ class ForgotPassword(View):
         return render(request, "forgot-password.html", {})
 
 
-def returnwmessage(req, url, u, pro, msg, ta):
+def returnwmessage(req, url, u, pro, msg, skillsList):
     return render(req, url, {"accountName": u.name, "accountEmail": u.email,
                              "accountProfession": pro,
                              "accountPassword": u.password,
                              "accountPhoneNumber": u.phoneNumber,
                              "accountAddress": u.homeAddress,
-                             "message": msg,
-                             "TA": ta})
+                             "skillsList": skillsList,
+                             "message": msg})
 
 
-def returnnomessage(req, url, u, pro, ta):
+def returnnomessage(req, url, u, pro, skillsList):
     return render(req, url, {"accountName": u.name, "accountEmail": u.email,
                              "accountProfession": pro,
                              "accountPassword": u.password,
                              "accountPhoneNumber": u.phoneNumber,
                              "accountAddress": u.homeAddress,
-                             "TA": ta})
+                             "skillsList": skillsList})
 
 
 def getProfession(u):

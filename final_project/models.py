@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 
 
@@ -16,6 +17,7 @@ class User(models.Model):
     type = models.CharField(max_length=1, choices=AccountType.choices, default=AccountType.Administrator)
     phoneNumber = models.IntegerField()
     homeAddress = models.CharField(max_length=75)
+    skills = models.CharField(max_length=75)
 
 
 class Course(models.Model):
@@ -34,8 +36,7 @@ class Professor(User):
 
 
 class TA(User):
-    skills = models.CharField(max_length=75)
-
+    pass
 
 class Lecture(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)

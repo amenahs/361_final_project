@@ -134,9 +134,11 @@
             <div class="col-md-4">
                 <div class="profile-work">
                     <p style="font-size:20px;">SKILLS</p>
-                    <a href="">Software Engineer</a><br/>
-                    <a href="">Web Developer</a><br/>
-                    <a href="">HTML/CSS</a><br/>
+                    {% if skillsList %}
+                        {% for s in skillsList %}
+                            <a href="">{{ s }}</a><br/>
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </div>
             <div class="col-md-8">

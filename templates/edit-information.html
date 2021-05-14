@@ -134,9 +134,16 @@
             <div class="col-md-4">
                 <div class="profile-work">
                     <p style="font-size:20px;">SKILLS</p>
-                    <a href="">Software Engineer</a><br/>
-                    <a href="">Web Developer</a><br/>
-                    <a href="">HTML/CSS</a><br/>
+                    {% if skillsList %}
+                        {% for s in skillsList %}
+                            <a href="">{{ s }}</a><br/>
+                        {% endfor %}
+                    {% endif %}
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="text" name="skills" class="form-control" id="floatingInput" placeholder="Add New Skill">
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-md-8">
@@ -183,6 +190,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col-md-6">
                                 <label>Profession</label>
