@@ -28,13 +28,38 @@ class Home(View):
 
 
 class Dashboard(View):
+
     def get(self, request):
         if not request.session.get("email"):
             return redirect("/")
+
         u = User.objects.get(email=request.session["email"])
         username = u.name
         isAdmin = u.type == AccountType.Administrator
-        return render(request, "dashboard.html", {'isAdmin': isAdmin, 'username': username})
+        if not isAdmin:
+            return redirect("/error-page/")
+
+        courses = Course.objects.all()
+        formattedCourses = []
+        for c in courses:
+            formattedCourses.append((c.courseID, c.name, c.numLectures, c.numSections))
+
+        admins = Administrator.objects.all()
+        formattedAdmins = []
+        for a in admins:
+            formattedAdmins.append((a.name, "Administrator", a.email, a.phoneNumber))
+
+        admins = Professor.objects.all()
+
+        for p in admins:
+            formattedAdmins.append((p.name, "Professor", p.email, p.phoneNumber))
+
+        admins = TA.objects.all()
+        for t in admins:
+            formattedAdmins.append((t.name, "Teaching Assistant", t.email, t.phoneNumber))
+
+        return render(request, "dashboard.html",
+                      {"courses": formattedCourses, "admins": formattedAdmins, 'username': username, 'isAdmin': isAdmin})
 
 
 class Error(View):
@@ -201,7 +226,7 @@ class EditInformation(View):
         taSkills = ''
         if u.type == AccountType.TA:
             isTA = True
-            taSkills = request.POST['skills']
+        # taSkills = request.POST['skills']
 
         accountProfession = getProfession(u)
 
@@ -234,6 +259,7 @@ class EditInformation(View):
         except ValueError:
             message = "Invalid email"
             return returnwmessage(request, "view-information.html", u, accountProfession, message, isTA)
+
 
 class ViewInformation(View):
     def get(self, request):
@@ -531,9 +557,32 @@ class AssignTASection(View):
     def post(self, request):
         taEmail = request.POST['ta']
         secID = request.POST['section']
+        
+        assignedSections = []
+        for t in tas:
+            secList = Section.objects.filter(taID=t)
+            for s in secList:
+                assignedSections.append((t.name, s.sectionID, s.course.courseID, s.course.name))
 
-        # TODO implement actual logic
-        return redirect("/assign-ta-section/")
+        try:
+            a = Admin()
+            updatedAssignment = a.__assignTASection__(taEmail, secID)
+
+            if updatedAssignment:
+                return redirect("/assign-ta-section/")
+            else:
+                message = "Assignment already exists"
+
+        except TypeError:
+            message = "Invalid input"
+        except ValueError:
+            message = "Please select valid TA and section"
+        except SyntaxError:
+            message = "TA has not been assigned to that course, or has already been assigned the maximum number of allocated sections"
+
+        return render(request, "assign-ta-section.html", {"sections": formattedSections, "tas": formattedTA,
+                                                          "assignedSections": assignedSections,
+                                                          "message": message})
 
 
 class ForgotPassword(View):
