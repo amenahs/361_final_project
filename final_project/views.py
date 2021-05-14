@@ -59,7 +59,7 @@ class Dashboard(View):
             formattedAdmins.append((t.name, "Teaching Assistant", t.email, t.phoneNumber))
 
         return render(request, "dashboard.html",
-                      {"courses": formattedCourses, "admins": formattedAdmins, 'username': username})
+                      {"courses": formattedCourses, "admins": formattedAdmins, 'username': username, 'isAdmin': isAdmin})
 
 
 class Error(View):
