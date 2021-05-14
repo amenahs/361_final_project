@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from final_project.views import Home, Dashboard, CreateAccount, CreateCourse, EditInformation, ViewInformation, AssignProfCourse, AssignTACourse, AssignTASection, Error, ForgotPassword, AllocateSections
+from final_project.views import Home, Dashboard, CreateAccount, CreateCourse, EditInformation, ViewInformation, \
+    AssignProfCourse, AssignTACourse, AssignTASection, Error, ForgotPassword, AllocateSections, EditAccount
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', Home.as_view()),
@@ -29,5 +31,6 @@ urlpatterns = [
     path('allocate-sections/', AllocateSections.as_view()),
     path('assign-ta-course/', AssignTACourse.as_view()),
     path('assign-ta-section/', AssignTASection.as_view()),
+    path('edit-account/', EditAccount.as_view()),
     path('forgot-password/', ForgotPassword.as_view())
 ]
