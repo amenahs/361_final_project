@@ -35,13 +35,13 @@ class Dashboard(View):
         u = User.objects.get(email=request.session["email"])
         username = u.name
         accountProfession = getProfession(u)
-        isNotAdmin = accountProfession!="Administrator"
+        isNotAdmin = accountProfession != "Administrator"
         courseHeader = "Assigned Courses"
 
         if not isNotAdmin:
             courses = Course.objects.all()
             courseHeader = "Active Courses"
-        elif accountProfession=="Professor":
+        elif accountProfession == "Professor":
             courses = Course.objects.filter(lecture__profID__email=u.email).distinct()
         else:
             courses = Course.objects.filter(lecture__taID__email=u.email).distinct()
@@ -63,7 +63,7 @@ class Dashboard(View):
         for t in admins:
             formattedAdmins.append((t.name, "Teaching Assistant", t.email, t.phoneNumber))
 
-        taAssignments= []
+        taAssignments = []
         if isNotAdmin:
             tas = TA.objects.all()
             for t in tas:
@@ -568,7 +568,7 @@ class AssignTASection(View):
         for t in tas:
             secList = Section.objects.filter(taID=t)
             for s in secList:
-                assignedSections.append((t.name, s.sectionID, s.course.courseID, s.course.name))
+                assignedSections.append((t.name, s.sectionID, s.course.courseID, s.course.name, ))
 
         return render(request, "assign-ta-section.html", {"sections": formattedSections, "tas": formattedTA,
                                                           "assignedSections": assignedSections})
@@ -576,7 +576,7 @@ class AssignTASection(View):
     def post(self, request):
         taEmail = request.POST['ta']
         secID = request.POST['section']
-        
+
         sections = Section.objects.all()
         formattedSections = []
         for s in sections:
@@ -614,6 +614,13 @@ class AssignTASection(View):
                                                           "message": message})
 
 
+class EditAccount(View):
+    def get(self, request):
+        if not request.session.get("email"):
+            return redirect("/")
+        return render(request, "edit-account.html", {})
+
+
 class ForgotPassword(View):
     def get(self, request):
         return render(request, "forgot-password.html", {})
@@ -628,6 +635,7 @@ def returnwmessage(req, url, u, pro, msg, ta):
                              "message": msg,
                              "TA": ta})
 
+
 def returnnomessage(req, url, u, pro, ta):
     return render(req, url, {"accountName": u.name, "accountEmail": u.email,
                              "accountProfession": pro,
@@ -635,6 +643,7 @@ def returnnomessage(req, url, u, pro, ta):
                              "accountPhoneNumber": u.phoneNumber,
                              "accountAddress": u.homeAddress,
                              "TA": ta})
+
 
 def getProfession(u):
     if u.type == AccountType.TA:
