@@ -377,7 +377,10 @@ class AssignTACourse(View):
         tas = TA.objects.all()
         formattedTA = []
         for t in tas:
-            formattedTA.append((t.email, t.name, t.skills))
+            skills = t.skills
+            if not skills:
+                skills = 'N/A'
+            formattedTA.append((t.email, t.name, skills))
 
         assignedLectures = []
         for t in tas:
@@ -515,7 +518,10 @@ class AssignTASection(View):
         tas = TA.objects.all()
         formattedTA = []
         for t in tas:
-            formattedTA.append((t.email, t.name, t.skills))
+            skills = t.skills
+            if not skills:
+                skills = 'N/A'
+            formattedTA.append((t.email, t.name, skills))
 
         assignedSections = []
         for t in tas:

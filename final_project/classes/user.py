@@ -26,7 +26,10 @@ class UserAccount():
                 u.homeAddress = address
                 changesMade = True
             if skills and u.skills != skills:
-                u.skills = u.skills + ", " + skills
+                if u.skills:
+                    u.skills = u.skills + ", " + skills
+                else:
+                    u.skills = u.skills + skills
                 changesMade = True
 
             u.save()
