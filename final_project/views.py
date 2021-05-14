@@ -558,6 +558,16 @@ class AssignTASection(View):
         taEmail = request.POST['ta']
         secID = request.POST['section']
         
+        sections = Section.objects.all()
+        formattedSections = []
+        for s in sections:
+            formattedSections.append((s.sectionID, s.course.courseID, s.course.name))
+
+        tas = TA.objects.all()
+        formattedTA = []
+        for t in tas:
+            formattedTA.append((t.email, t.name, t.skills))
+
         assignedSections = []
         for t in tas:
             secList = Section.objects.filter(taID=t)
