@@ -25,14 +25,9 @@ class UserAccount():
             if u.homeAddress != address:
                 u.homeAddress = address
                 changesMade = True
-
-            if u.type==AccountType.TA:
-                ta = TA.objects.get(email=userEmail)
-                ta.save()
-                if skills and ta.skills != skills:
-                    ta.skills = skills
-                    changesMade = True
-                    ta.save()
+            if skills and u.skills != skills:
+                u.skills = u.skills + ", " + skills
+                changesMade = True
 
             u.save()
             return changesMade

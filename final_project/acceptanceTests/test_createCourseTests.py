@@ -18,13 +18,13 @@ class CreateCourseTests(TestCase):
 
     def test_createCourseNew_NoLecNoSec(self):
         resp = self.client.post('/create-course/', {'courseID': 315, 'name': 'Assembly Programming', 'lectureNum': 0, 'sectionNum': 0})
-        self.assertEqual('/create-course/', resp.url, msg="Creating unique course with no lecture or sections was not successful")
+        self.assertEqual('Course created successfully', resp.context["message"], msg="Creating unique course with no lecture or sections was not successful")
 
     def test_createCourseNew_OneLecNoSec(self):
         resp = self.client.post('/create-course/', {'courseID': 395, 'name': 'Ethics in Computing', 'lectureNum': 1, 'sectionNum': 0})
-        self.assertEqual('/create-course/', resp.url, msg="Creating unique course with one lecture and no sections was not successful")
+        self.assertEqual('Course created successfully', resp.context["message"], msg="Creating unique course with one lecture and no sections was not successful")
 
     def test_createCourseNew_MultLecAndSec(self):
         resp = self.client.post('/create-course/', {'courseID': 337, 'name': 'Systems Programming', 'lectureNum': 2, 'sectionNum': 3})
-        self.assertEqual('/create-course/', resp.url, msg="Creating unique course with multiple lectures and sections was not successful")
+        self.assertEqual('Course created successfully', resp.context["message"], msg="Creating unique course with multiple lectures and sections was not successful")
 
