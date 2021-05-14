@@ -358,7 +358,7 @@ class AssignProfCourse(View):
         except ValueError:
             return render(request, "assign-prof-course.html", {"lectures": formattedLectures, "profs": formattedProf,
                                                                "assignedLectures": assignedLectures,
-                                                               "message": "Professor or lecture does not exist"})
+                                                               "message": "Please select valid professor and lecture"})
 
 
 class AssignTACourse(View):
@@ -446,7 +446,7 @@ class AssignTACourse(View):
         except ValueError:
             return render(request, "assign-ta-course.html", {"lectures": formattedLectures, "tas": formattedTA,
                                                              "assignedLectures": assignedLectures,
-                                                             "message": "TA or lecture does not exist"})
+                                                             "message": "Please select valid TA and lecture"})
 
 
 class AllocateSections(View):
@@ -479,7 +479,7 @@ class AllocateSections(View):
             return render(request, "allocate-sections.html", {'isAllocation': False,
                                                               'message': message})
         except ValueError:
-            message = "TA or lecture does not exist"
+            message = "TA lecture assignment does not exist"
             return render(request, "allocate-sections.html", {'isAllocation': False,
                                                               'message': message})
         except SyntaxError:
@@ -523,7 +523,7 @@ class AssignTASection(View):
         for t in tas:
             secList = Section.objects.filter(taID=t)
             for s in secList:
-                assignedSections.append((t.name, s.lectureID, s.course.courseID, s.course.name))
+                assignedSections.append((t.name, s.sectionID, s.course.courseID, s.course.name))
 
         return render(request, "assign-ta-section.html", {"sections": formattedSections, "tas": formattedTA,
                                                           "assignedSections": assignedSections})
