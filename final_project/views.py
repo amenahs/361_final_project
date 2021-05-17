@@ -506,7 +506,7 @@ class AssignTASection(View):
             return redirect("/")
 
         u = User.objects.get(email=request.session["email"])
-        isAdmin = u.type == AccountType.Administrator
+        isAdmin = (u.type == AccountType.Administrator or u.type == AccountType.Professor)
         if not isAdmin:
             return redirect("/error-page/")
 
@@ -577,6 +577,12 @@ class EditAccount(View):
     def get(self, request):
         if not request.session.get("email"):
             return redirect("/")
+
+        u = User.objects.get(email=request.session["email"])
+        isAdmin = u.type == AccountType.Administrator
+        if not isAdmin:
+            return redirect("/error-page/")
+
         return render(request, "edit-account.html", {})
 
 
