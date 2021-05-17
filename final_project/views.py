@@ -185,6 +185,17 @@ class CreateCourse(View):
         lectureNum = request.POST['lectureNum']
         sectionNum = request.POST['sectionNum']
 
+        try:
+            a = Admin()
+            a.__createCourse__(newCourseID, newCourseName, lectureNum, sectionNum)
+
+        except ValueError:
+            message = "Course already exists"
+        except TypeError:
+            message = "Invalid input"
+        else:
+            message = "Course created successfully"
+
         courses = Course.objects.all()
         formattedCourses = []
         for c in courses:
@@ -198,21 +209,9 @@ class CreateCourse(View):
         for s in sections:
             formattedSections.append((s.course.courseID, s.sectionID))
 
-        try:
-            a = Admin()
-            a.__createCourse__(newCourseID, newCourseName, lectureNum, sectionNum)
-        except ValueError:
-            return render(request, "create-course.html",
+        return render(request, "create-course.html",
                           {"courses": formattedCourses, "lectures": formattedLectures, "sections": formattedSections,
-                           "message": "Course already exists"})
-        except TypeError:
-            return render(request, "create-course.html",
-                          {"courses": formattedCourses, "lectures": formattedLectures, "sections": formattedSections,
-                           "message": "Invalid input"})
-        else:
-            return render(request, "create-course.html",
-                          {"courses": formattedCourses, "lectures": formattedLectures, "sections": formattedSections,
-                           "message": "Course created successfully"})
+                           "message": message})
 
 
 class EditInformation(View):
