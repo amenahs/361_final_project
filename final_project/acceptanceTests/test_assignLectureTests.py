@@ -55,7 +55,3 @@ class AssignTACourseTests(TestCase):
         resp = self.client.post('/assign-ta-course/', {'ta': 'testta@uwm.edu', 'lecture': '000'})
         self.assertEqual(resp.context["message"], "Please select valid TA and lecture", msg="Invalid lecture selected did not result in error message for ta assignment")
 
-    def test_validEntry(self):
-        resp = self.client.post('/assign-ta-course/', {'ta': 'testta@uwm.edu', 'lecture': '123'})
-        self.assertEqual(resp.url, '/allocate-sections/', msg='User was not redirected to correct page after assigning course to ta with valid input')
-
